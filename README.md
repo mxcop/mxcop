@@ -1,3 +1,3 @@
 ### Hi there 👋
 
-![](https://github.com/jstrieb/github-stats/blob/master/generated/overview.svg)
+![Max's GitHub stats](https://github-readme-stats.vercel.app/api?username=mxcop&count_private=true)
