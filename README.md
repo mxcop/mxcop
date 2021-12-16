@@ -1,1 +1,1 @@
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=mxcop&bg_color=22272e&border_color=444c56&icon_color=adbac7&title_color=adbac7)](https://github.com/anuraghazra/github-readme-stats)
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=mxcop&bg_color=22272e&border_color=444c56&text_color=768390&title_color=adbac7)](https://github.com/anuraghazra/github-readme-stats)
