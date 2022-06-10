@@ -13,7 +13,7 @@ In my free time I love working on **awesome projects** like the ones visible bel
 </a>
 
 <a href="https://github.com/mxcop/CSNN">
-  <img align="center" src="https://github-readme-stats.vercel.app/api/pin?username=emberry-org&repo=rhizome&border_color=026ed1&title_color=e4edf8&icon_color=e4edf8&text_color=a3b9d1&bg_color=070f17" />
+  <img align="center" src="https://github-readme-stats.vercel.app/api/pin?username=mxcop&repo=CSNN&border_color=026ed1&title_color=e4edf8&icon_color=e4edf8&text_color=a3b9d1&bg_color=070f17" />
 </a>
 </h1>
 
