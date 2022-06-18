@@ -11,24 +11,24 @@ In my free time I love working on **awesome projects** like the ones visible bel
 
 <h1>
 <a href="https://github.com/emberry-org/emberry">
-  <img align="center" width=80 src="https://github.com/emberry-org/emberry/blob/main/.github/assets/logo.png">
+  <img align="center" width=70 src="https://github.com/emberry-org/emberry/blob/main/.github/assets/logo.png">
   <img align="center" src="https://github-readme-stats.vercel.app/api/pin?username=emberry-org&repo=emberry&border_color=ff770000&title_color=f9f2e5&icon_color=f9f2e5&text_color=d1bda3&bg_color=17070900" />
 </a>
 
 <a href="https://github.com/emberry-org/rhizome">
-  <img align="center" width=80 src="https://github.com/emberry-org/rhizome/blob/main/.github/assets/logo.png">
+  <img align="center" width=70 src="https://github.com/emberry-org/rhizome/blob/main/.github/assets/logo.png">
   <img align="center" src="https://github-readme-stats.vercel.app/api/pin?username=emberry-org&repo=rhizome&border_color=026ed100&title_color=e4edf8&icon_color=e4edf8&text_color=a3b9d1&bg_color=070f1700" />
 </a>
 </h1>
 
 <h1>
 <a href="https://github.com/youtile/youtile">
-  <img align="center" width=80 src="https://github.com/youtile/youtile/blob/main/.github/assets/logo.png">
+  <img align="center" width=70 src="https://github.com/youtile/youtile/blob/main/.github/assets/logo.png">
   <img align="center" src="https://github-readme-stats.vercel.app/api/pin?username=youtile&repo=youtile&border_color=a241e800&title_color=faf2fd&icon_color=faf2fd&text_color=e2c7f2&bg_color=15061900" />
 </a>
 
 <a href="https://github.com/mxcop/6502-Emulator">
-  <img align="center" width=80>
+  <img align="center" width=70>
   <img align="center" src="https://github-readme-stats.vercel.app/api/pin?username=mxcop&repo=6502-Emulator&border_color=02d16e00&title_color=e4f8ee&icon_color=e4f8ee&text_color=a3d1b5&bg_color=05110600" />
 </a>
 </h1>
