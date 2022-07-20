@@ -1,6 +1,6 @@
 <h1 align="center">
-  <a href="https://github.com/tauri-apps"><img src="https://skillicons.dev/icons?i=tauri,unity" align="left" height=40></a>
-  <a href="https://github.com/rust-lang"><img src="https://skillicons.dev/icons?i=rust,svelte" align="right" height=40></a>
+  <a href="https://github.com/tauri-apps"><img src="https://skillicons.dev/icons?i=tauri,unity" align="left" height=38></a>
+  <a href="https://github.com/rust-lang"><img src="https://skillicons.dev/icons?i=rust,svelte" align="right" height=38></a>
     
   <div align="center">
       	<samp>&lt;</samp>Hello, world! <samp>/&gt;</samp>
