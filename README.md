@@ -1,6 +1,21 @@
-<div>
-Hi, I'm <b>Max Coppen</b> and I tell fancy calculators what to do.<br>
-In more technical words, I <b>love programming!</b> <br>
-I make <b>games, applications, websites</b>, anything code I make it.<br>
-In my free time I love working on the <b>awesome projects</b> visible below :)
+<div align="center">
+<h3>Hello there!</h3>
+My name is Max and I am a <b>Creator</b> at :heart:.<br>
+I love creating awesome things and learning new things.<br>
+<br>
+I'm always on the lookout for the next big thing in the tech world.<br>
+In my free time I love working on the :sparkles: projects visible below :smile:
+</div>
+
+# 
+<h3 align="center">Currently Learning</h3>
+
+<div align="center">
+    <a href="https://tauri.app/">Tauri</a>
+    —
+    <a href="https://www.rust-lang.org/">Rust</a>
+    —
+    <a href="https://en.wikipedia.org/wiki/User_interface_design">UI/UX Design</a>
+    —
+    <a href="https://www.figma.com/">Figma</a>
 </div>
