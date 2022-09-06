@@ -19,3 +19,9 @@ In my free time I love working on the :sparkles: projects visible below :smile:
     —
     <a href="https://www.figma.com/">Figma</a>
 </div>
+
+<br>
+
+<div align="center">
+    <a href="https://www.rust-lang.org/"><img width="42" src="https://github.com/mxcop/mxcop/blob/main/.github/assets/test.svg" /></a>
+</div>
