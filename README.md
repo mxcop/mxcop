@@ -8,6 +8,7 @@ In my free time I love working on the :sparkles: projects visible below :smile:
 </div>
 
 # 
+
 <h3 align="center">Currently Learning</h3>
 
 <div align="center">
@@ -20,11 +21,12 @@ In my free time I love working on the :sparkles: projects visible below :smile:
     <a href="https://www.figma.com/">Figma</a>
 </div>
 
-<br>
+<h3 align="center">Current Expertise</h3>
 
 <div align="center">
-    <a href="https://www.rust-lang.org/"><img height="48" src="https://github.com/mxcop/mxcop/blob/main/.github/assets/csharp-lang.svg" /></a>
+    <a href="https://vuejs.org/"><img height="48" src="https://github.com/mxcop/mxcop/blob/main/.github/assets/vue-lang.svg" /></a>
+    <a href="https://nl.wikipedia.org/wiki/C%E2%99%AF"><img height="48" src="https://github.com/mxcop/mxcop/blob/main/.github/assets/csharp-lang.svg" /></a>
     <a href="https://www.rust-lang.org/"><img height="48" src="https://github.com/mxcop/mxcop/blob/main/.github/assets/rust-lang.svg" /></a>
-    <a href="https://www.rust-lang.org/"><img height="48" src="https://github.com/mxcop/mxcop/blob/main/.github/assets/js-ts-lang.svg" /></a>
-    <a href="https://www.rust-lang.org/"><img height="48" src="https://github.com/mxcop/mxcop/blob/main/.github/assets/cpp-lang.svg" /></a>
+    <a href="https://www.typescriptlang.org/"><img height="48" src="https://github.com/mxcop/mxcop/blob/main/.github/assets/js-ts-lang.svg" /></a>
+    <a href="https://svelte.dev/"><img height="48" src="https://github.com/mxcop/mxcop/blob/main/.github/assets/svelte-lang.svg" /></a>
 </div>
