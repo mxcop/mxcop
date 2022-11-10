@@ -3,8 +3,8 @@
 My name is Max and I am a <b>Creator</b> at :heart:.<br>
 I love creating awesome things and learning new things.<br>
 <br>
-I'm always on the lookout for the next big thing in the tech world.<br>
-In my free time I love working on the :sparkles: projects visible below :smile:
+I'm always exicted to work on new amazing projects.<br>
+In my free time I love working on these :sparkles: projects visible below :smile:
 </div>
 
 # 
