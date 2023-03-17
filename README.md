@@ -1,10 +1,6 @@
 <div align="center">
 <h3>Hello there!</h3>
-My name is Max and I am a <b>Creator</b> at :heart:.<br>
-I love creating awesome things and learning new things.<br>
-<br>
-I'm always exicted to work on new amazing projects.<br>
-In my free time I love working on these :sparkles: projects visible below :smile:
+Check out some projects I've worked on below :D
 </div>
 
 # 
