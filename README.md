@@ -1,20 +1,20 @@
 <div align="center">
 <h3>Hello there!</h3>
-Check out some projects I've worked on below :D
+Welcome to my real-time portfolio :D
 </div>
 
-# 
+##
 
 <h3 align="center">Currently Learning</h3>
 
 <div align="center">
-    <a href="https://tauri.app/">Tauri</a>
+    <a href="https://www.solidjs.com/">SolidJS</a>
     —
     <a href="https://www.rust-lang.org/">Rust</a>
     —
-    <a href="https://en.wikipedia.org/wiki/User_interface_design">UI/UX Design</a>
+    <a href="https://cplusplus.com/">C & C++</a>
     —
-    <a href="https://www.figma.com/">Figma</a>
+    <a href="https://tauri.app/">Tauri</a>
 </div>
 
 <h3 align="center">Current Expertise</h3>
