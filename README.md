@@ -5,7 +5,7 @@ Welcome to my real-time portfolio :D
 
 ##
 
-<h3 align="center">Currently Learning</h3>
+<h3 align="center">Currently learning</h3>
 
 <div align="center">
     <a href="https://www.solidjs.com/">SolidJS</a>
@@ -17,7 +17,7 @@ Welcome to my real-time portfolio :D
     <a href="https://tauri.app/">Tauri</a>
 </div>
 
-<h3 align="center">Current Expertise</h3>
+<h3 align="center">Experienced with</h3>
 
 <div align="center">
     <a href="https://vuejs.org/"><img height="48" src="https://github.com/mxcop/mxcop/blob/main/.github/assets/vue-lang.svg" /></a>
