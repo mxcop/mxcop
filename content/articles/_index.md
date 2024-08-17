@@ -1,4 +1,4 @@
 +++
-title = "blog"
+title = "articles"
 sort_by = "date"
 +++

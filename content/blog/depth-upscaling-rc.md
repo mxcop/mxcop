@@ -11,3 +11,5 @@ color = "emerald"
 name = "radiance cascades"
 color = "lime"
 +++
+
+![Bilinear probes](/images/rc-render-pipeline.webp)

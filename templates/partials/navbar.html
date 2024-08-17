@@ -20,11 +20,11 @@ const toggleDark = () => {
         <div class="bar">
             <h3 class="title">MΛX</h3>
             <nav>
-                <a href="">Home</a>
-                <a href="">Articles</a>
-                <a href="">Blog</a>
-                <a href="">About</a>
-                <a href="">Contact</a>
+                <a href="{{ get_url(path="", trailing_slash=true) | safe }}">Home</a>
+                <a href="{{ get_url(path="articles", trailing_slash=true) | safe }}">Articles</a>
+                <a href="{{ get_url(path="blog", trailing_slash=true) | safe }}">Blog</a>
+                <a href="{{ get_url(path="about.html", trailing_slash=false) | safe }}">About</a>
+                <a href="{{ get_url(path="contact", trailing_slash=true) | safe }}">Contact</a>
             </nav>
             <div class="theme-toggle">
                 <button class="ico-btn" onclick="toggleDark()">

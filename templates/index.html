@@ -46,6 +46,7 @@
 
     <main>
         {% block content %}
+        {% set section = get_section(path="articles/_index.md") %}
         <div class="posts">
             {% for page in section.pages | reverse %}
             <article class="post">
@@ -55,9 +56,11 @@
                         {{ page.title | safe }}
                     </h2>
                     <div class="tags">
+                        {% if page.extra.tags %}
                         {% for tag in page.extra.tags %}
-                        <p class="tag">{{ tag | safe }}</p>
+                        <p class="tag {{ tag.color }}">{{ tag.name | safe }}</p>
                         {% endfor %}
+                        {% endif %}
                     </div>
                 </header>
 
