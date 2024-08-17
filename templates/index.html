@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+    <!-- Enable responsiveness on mobile devices-->
+    <!-- viewport-fit=cover is to support iPhone X rounded corners and notch in landscape-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+
+    <title>{% block title %}{{ config.title }}{% endblock title %}</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ get_url(path="general.css", trailing_slash=false) }}">
+
+    {% if config.generate_feed %}
+    <link rel="alternate" type={% if config.feed_filename=="atom.xml" %}"application/atom+xml"{% else
+        %}"application/rss+xml"{% endif %} title="RSS" href="{{ get_url(path=config.feed_filename) | safe }}">
+    {% endif %}
+
+    {% block extra_head %}
+    {% endblock extra_head %}
+</head>
+
+<body>
+    <div class="gradient-bg"></div>
+    {% include "partials/navbar.html" %}
+
+    {% block sidebar %}
+    <div class="sidebar">
+        <div class="container">
+            <div class="sidebar-about">
+                {% block sidebar_about %}
+                <a href="{{ config.base_url }}">
+                    <h1>{{ config.title }}</h1>
+                </a>
+                {% if config.description %}
+                <p class="lead">{{config.description}}</p>
+                {% endif %}
+                {% endblock sidebar_about %}
+            </div>
+        </div>
+    </div>
+    {% endblock sidebar %}
+
+    <main>
+        {% block content %}
+        <div class="posts">
+            {% for page in section.pages | reverse %}
+            <article class="post">
+                <header>
+                    <h2>
+                        <i class="ico article-link"></i>
+                        {{ page.title | safe }}
+                    </h2>
+                    <div class="tags">
+                        {% for tag in page.extra.tags %}
+                        <p class="tag">{{ tag | safe }}</p>
+                        {% endfor %}
+                    </div>
+                </header>
+
+                <footer>
+                    <p class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</p>
+                </footer>
+
+                <a class="post-link" href="{{ page.permalink }}"></a>
+            </article>
+            {% endfor %}
+        </div>
+
+        {% set section = get_section(path="blog/_index.md") %}
+        <div class="posts">
+            {% for page in section.pages %}
+            <article class="post">
+                <header>
+                    <h2>
+                        <i class="ico blog-link"></i>
+                        {{ page.title | safe }}
+                    </h2>
+                    <div class="tags">
+                        {% if page.extra.tags %}
+                        {% for tag in page.extra.tags %}
+                        <p class="tag {{ tag.color }}">{{ tag.name | safe }}</p>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </header>
+
+                <footer>
+                    <p>{{ page.description }}</p>
+                    <p class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</p>
+                </footer>
+
+                <a class="post-link" href="{{ page.permalink }}"></a>
+            </article>
+            {% endfor %}
+        </div>
+        {% endblock content %}
+    </main>
+
+</body>
+
+</html>

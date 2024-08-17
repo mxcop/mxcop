@@ -1,0 +1,41 @@
+// Rubik
+@font-face {
+    font-family: "Rubik";
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 300 900;
+    src:
+      local("Rubik"),
+      url("fonts/rubik-variable.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Rubik";
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-weight: 300 900;
+    src:
+      local("Rubik"),
+      url("fonts/rubik-italic-variable.ttf") format("truetype");
+}
+
+// Inter
+@font-face {
+    font-family: "Inter";
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 300 900;
+    src:
+      local("Inter"),
+      url("fonts/inter-variable.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-optical-sizing: auto;
+    font-style: italic;
+    font-weight: 300 900;
+    src:
+      local("Inter"),
+      url("fonts/inter-italic-variable.ttf") format("truetype");
+}

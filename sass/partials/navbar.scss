@@ -1,0 +1,28 @@
+.navbar {
+    width: 100%;
+    max-width: 1280px;
+    height: 64px;
+    align-self: center;
+}
+
+.navbar .bar {
+    width: calc(100% - 32px);
+    height: 32px;
+    margin: auto;
+
+    background: var(--c-panel-1);
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+}
+
+.navbar .title {
+    font-family: "Inter", sans-serif;
+    font-size: 22px;
+    margin: 0 0 4px 8px;
+    color: var(--c-text-2);
+}

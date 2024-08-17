@@ -1,0 +1,45 @@
+@import './vars';
+
+// Light theme
+:root {
+    --c-bg: var(--c-stone-100);
+
+    --c-text-1: var(--c-stone-900);
+    --c-text-2: var(--c-stone-700);
+    --c-text-3: var(--c-stone-600);
+
+    --c-panel-1: var(--c-stone-200);
+    --c-panel-2: var(--c-stone-300);
+
+    --c-code-bg: var(--c-stone-800);
+
+    // Tags
+    --c-tag-bg-amber: var(--c-amber-500);
+    --c-tag-text-amber: var(--c-amber-100);
+    --c-tag-bg-lime: var(--c-lime-500);
+    --c-tag-text-lime: var(--c-lime-100);
+    --c-tag-bg-emerald: var(--c-emerald-500);
+    --c-tag-text-emerald: var(--c-emerald-100);
+}
+
+// Dark theme
+.dark {
+    --c-bg: var(--c-stone-900);
+    
+    --c-text-1: var(--c-stone-100);
+    --c-text-2: var(--c-stone-300);
+    --c-text-3: var(--c-stone-400);
+    
+    --c-panel-1: var(--c-stone-800);
+    --c-panel-2: var(--c-stone-700);
+
+    --c-code-bg: var(--c-stone-900);
+
+    // Tags
+    --c-tag-bg-amber: var(--c-amber-700);
+    --c-tag-text-amber: var(--c-amber-200);
+    --c-tag-bg-lime: var(--c-lime-700);
+    --c-tag-text-lime: var(--c-lime-200);
+    --c-tag-bg-emerald: var(--c-emerald-700);
+    --c-tag-text-emerald: var(--c-emerald-200);
+}
