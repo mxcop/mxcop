@@ -19,6 +19,8 @@
         %}"application/rss+xml"{% endif %} title="RSS" href="{{ get_url(path=config.feed_filename) | safe }}">
     {% endif %}
 
+    {% include "partials/math.html" %}
+
     {% block extra_head %}
     {% endblock extra_head %}
 </head>
