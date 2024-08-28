@@ -24,9 +24,6 @@ You may wonder *"What can voxel ray tracing do?"*.<br>
 Here's two screenshots taken from my own `CPU` voxel ray tracer: 
 
 <div class="h-group">
-![alt text](filename)
-![alt text](filename)
-
 <figure title="Ray traced voxels with lighting">
 <img class="fig" src="./assets/images/lit-voxels.png" width="256">
 </figure>

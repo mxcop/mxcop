@@ -4,6 +4,10 @@
 
 @import "partials/navbar";
 
+* {
+    box-sizing: border-box;
+}
+
 html {
     font-family: "Rubik", sans-serif;
 }
@@ -30,7 +34,12 @@ a {
 main {
     align-self: center;
     width: 100%;
-    max-width: 720px;
+    max-width: calc(1280px - 32px);
+    padding: 0 16px;
+}
+
+.title-soft {
+    color: var(--c-text-3);
 }
 
 .tag {

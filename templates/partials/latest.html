@@ -1,0 +1,53 @@
+<div class="latest">
+    <!-- Latest blog post -->
+    {% set blog_section = get_section(path="blog/_index.md") %}
+    {% set blog_post = blog_section.pages | first %}
+    <h2 class="title-soft">Latest blog post</h2>
+    <article class="post">
+        <header>
+            <h2>
+                <i class="ico blog-link"></i>
+                {{ blog_post.title | safe }}
+            </h2>
+            <div class="tags">
+                {% if blog_post.extra.tags %}
+                {% for tag in blog_post.extra.tags %}
+                <p class="tag {{ tag.color }}">{{ tag.name | safe }}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </header>
+
+        <footer>
+            <p class="post-date">{{ blog_post.date | date(format="%Y-%m-%d") }}</p>
+        </footer>
+
+        <a class="post-link" href="{{ blog_post.permalink }}"></a>
+    </article>
+
+    <!-- Latest article post -->
+    {% set article_section = get_section(path="articles/_index.md") %}
+    {% set article_post = article_section.pages | first %}
+    <h2 class="title-soft">Latest article</h2>
+    <article class="post">
+        <header>
+            <h2>
+                <i class="ico article-link"></i>
+                {{ article_post.title | safe }}
+            </h2>
+            <div class="tags">
+                {% if article_post.extra.tags %}
+                {% for tag in article_post.extra.tags %}
+                <p class="tag {{ tag.color }}">{{ tag.name | safe }}</p>
+                {% endfor %}
+                {% endif %}
+            </div>
+        </header>
+
+        <footer>
+            <p class="post-date">{{ article_post.date | date(format="%Y-%m-%d") }}</p>
+        </footer>
+
+        <a class="post-link" href="{{ article_post.permalink }}"></a>
+    </article>
+</div>
