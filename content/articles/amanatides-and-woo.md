@@ -24,7 +24,7 @@ Designed for, however not limited to, <span class="yellow">ray tracing</span> vo
 You may wonder *"What can voxel ray tracing do?"*.<br>
 Here's two screenshots taken from my own `CPU` voxel ray tracer: 
 
-{{ img2x1(
+{{ img_2x1(
     img1="/img/articles/amanatides-and-woo/lit-voxels.png", alt1="Ray traced voxels with lighting.",
     img2="/img/articles/amanatides-and-woo/voxel-terrain.png", alt2="Ray traced voxel terrain."
 ) }}
