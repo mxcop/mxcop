@@ -1,23 +1,21 @@
 {% extends "index.html" %}
-<!-- This template is used for the /blog/ and /articles/ sections -->
 
 <!-- Includes -->
 {% block head %}
 
 <!-- CSS -->
-<link rel="stylesheet" href="{{ get_url(path="sections/posts.css", trailing_slash=false) }}">
+<link rel="stylesheet" href="{{ get_url(path="sections/projects.css", trailing_slash=false) }}">
 
 {% endblock head %}
 
 <!-- Content -->
 {% block content %}
 
-<div class="posts">
+<div class="projects">
     {% for page in section.pages | reverse %}
-    <article class="post">
-        <header>
+    <article class="project">
+        <header style="background-image: url('{{ get_url(path=page.extra.banner, trailing_slash=false) }}')">
             <h2>
-                <i class="ico {{ section.extra.icon }}"></i>
                 {{ page.title | safe }}
             </h2>
             <div class="tags">
@@ -34,7 +32,7 @@
             <p class="date">{{ page.date | date(format="%Y-%m-%d") }}</p>
         </footer>
 
-        <a class="post-link" href="{{ page.permalink }}"></a>
+        <a class="project-link" href="{{ page.permalink }}"></a>
     </article>
     {% endfor %}
 </div>

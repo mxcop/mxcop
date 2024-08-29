@@ -1,5 +1,6 @@
 +++
 title = "Amanatides and Woo's fast Grid Traversal"
+description = "A look at the inner workings of the famous fast grid traversal algorithm."
 date = 2024-04-20
 updated = 2024-08-17
 
@@ -23,17 +24,15 @@ Designed for, however not limited to, <span class="yellow">ray tracing</span> vo
 You may wonder *"What can voxel ray tracing do?"*.<br>
 Here's two screenshots taken from my own `CPU` voxel ray tracer: 
 
-<div class="h-group">
-<figure title="Ray traced voxels with lighting">
-<img class="fig" src="./assets/images/lit-voxels.png" width="256">
-</figure>
-<figure title="Ray traced voxel terrain">
-<img class="fig" src="./assets/images/voxel-terrain.png" width="256">
-</figure>
-</div>
+{{ img2x1(
+    img1="/img/articles/amanatides-and-woo/lit-voxels.png", alt1="Ray traced voxels with lighting.",
+    img2="/img/articles/amanatides-and-woo/voxel-terrain.png", alt2="Ray traced voxel terrain."
+) }}
 
 Together we're going to find out how and why this algorithm works.<br>
 *So, let's dive in!*
+
+---
 
 ## Prerequisites
 
@@ -127,9 +126,9 @@ float VoxelTracer::find_nearest(const vec3& ro, const vec3& rd) const {
 If we shoot a ray for each pixel on screen, and turn the output of `find_nearest` into a grayscale color.<br>
 We should get something that looks like this:
 
-<figure title="Testing our ray vs aabb intersection">
-<img class="fig" src="./assets/images/ray-vs-aabb-test.png" width="256">
-</figure>
+<img src="/img/articles/amanatides-and-woo/ray-vs-aabb-test.png" alt="Testing our ray vs aabb intersection." title="Testing our ray vs aabb intersection.">
+
+---
 
 ## Traversal Concept
 
@@ -244,6 +243,8 @@ Then on the <span class="yellow">2nd</span> step, `tmax.x` was updated and it is
 
 Now the question is *"How do we calculate `tmax`?"*.<br>
 That's what we're going to find out next.
+
+---
 
 ## Traversal Setup
 
@@ -460,6 +461,8 @@ This is important because later we will be updating `tmax` using our `delta`.
 
 **Finally!** We have everything setup, and we're ready to start traversing!
 
+---
+
 ## Traversal
 
 Now that everything is already setup for us, we get to the easiest part, the <span class="yellow">actual traversal</span>.<br>
@@ -518,6 +521,8 @@ entry_t + (tmax[axis] - delta[axis]) / voxels_per_unit[axis]
 ```
 
 And that's it, that's the entire algorithm implemented and <span class="yellow">ready to go</span>!
+
+---
 
 ## All Together Now!
 
@@ -597,9 +602,9 @@ float VoxelTracer::find_nearest(const vec3& ro, const vec3& rd) const {
 And when we once again shoot a ray for each pixel into the scene.<br>
 We get to finally see some <span class="yellow">voxels on screen</span>!
 
-<figure title="Voxel ray tracing">
-<img class="fig" src="./assets/images/voxel-traversal.png" width="256">
-</figure>
+<img src="/img/articles/amanatides-and-woo/voxel-traversal.png" alt="Voxel ray tracing." title="Voxel ray tracing.">
+
+---
 
 ## Wrapping Up
 <span class="yellow">Thank you</span> for reading all the way to the end, I hope you now have a better understanding of the algorithm.<br>

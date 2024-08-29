@@ -1,3 +1,14 @@
+<!-- Includes -->
+{% block head %}
+
+<!-- CSS -->
+<link rel="stylesheet" href="{{ get_url(path="sections/posts.css", trailing_slash=false) }}">
+
+{% endblock head %}
+
+<!-- Content -->
 {% block content %}
+
 {% include "partials/latest.html" %}
+
 {% endblock content %}
