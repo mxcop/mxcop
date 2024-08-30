@@ -48,8 +48,10 @@
         }
 
         .date {
-            color: var(--c-text-3);
+            font-family: "Monocraft", monospace;
             font-style: italic;
+            font-size: 14px;
+            color: var(--c-text-3);
         }
     }
 }

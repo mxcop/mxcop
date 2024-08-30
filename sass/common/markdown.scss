@@ -1,6 +1,11 @@
 // Standard
 a {
     color: var(--c-link);
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
 h1, h2, h3 {
@@ -21,6 +26,10 @@ blockquote {
     border-radius: 1.5px;
     margin-left: 0;
     padding-left: 1rem;
+
+    a {
+        color: var(--c-link-soft);
+    }
 }
 
 code:not([data-lang]) {

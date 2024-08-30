@@ -10,7 +10,7 @@ name = "graphics"
 color = "emerald"
 
 [[extra.tags]]
-name = "grid traversal"
+name = "voxel traversal"
 color = "amber"
 +++
 
@@ -71,7 +71,7 @@ class VoxelTracer {
 What to fill `grid` with is up to you.<br>
 Each voxel in the grid is stored as a color `unsigned int`, RGBA.
 
-> For some inspiration: you could fill it with a noise pattern, like Perlin noise.
+> For some inspiration: you could fill it with a noise pattern, like [Perlin noise](https://en.wikipedia.org/wiki/Perlin_noise).
 
 Futhermore, before we start the traversal we need to <span class="highlight">intersect</span> our ray with the <span class="highlight">grid bounding box</span>.<br>
 If our ray **<span class="error">doesn't</span>** intersect the grid then we don't need to traverse it.<br>

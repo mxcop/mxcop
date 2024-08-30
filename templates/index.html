@@ -19,8 +19,6 @@
         %}"application/rss+xml"{% endif %} title="RSS" href="{{ get_url(path=config.feed_filename) | safe }}">
     {% endif %}
 
-    {% include "partials/math.html" %}
-
     <!-- So pages can add their own head elements -->
     {% block head %}
     {% endblock head %}

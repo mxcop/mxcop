@@ -20,7 +20,7 @@
 
         <footer>
             <p>{{ blog_post.description }}</p>
-            <p class="post-date">{{ blog_post.date | date(format="%Y-%m-%d") }}</p>
+            <p class="date">{{ blog_post.date | date(format="%Y-%m-%d") }}</p>
         </footer>
 
         <a class="post-link" href="{{ blog_post.permalink }}"></a>
@@ -47,7 +47,7 @@
 
         <footer>
             <p>{{ article_post.description }}</p>
-            <p class="post-date">{{ article_post.date | date(format="%Y-%m-%d") }}</p>
+            <p class="date">{{ article_post.date | date(format="%Y-%m-%d") }}</p>
         </footer>
 
         <a class="post-link" href="{{ article_post.permalink }}"></a>
