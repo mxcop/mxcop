@@ -74,8 +74,8 @@ Each voxel in the grid is stored as a color `unsigned int`, RGBA.
 > For some inspiration: you could fill it with a noise pattern, like [Perlin noise](https://en.wikipedia.org/wiki/Perlin_noise).
 
 Futhermore, before we start the traversal we need to <span class="highlight">intersect</span> our ray with the <span class="highlight">grid bounding box</span>.<br>
-If our ray **<span class="error">doesn't</span>** intersect the grid then we don't need to traverse it.<br>
-If our ray **<span class="success">does</span>** intersect we will also get the time along the ray where it enters the grid called `entry_t`.
+If our ray **doesn't** intersect the grid then we don't need to traverse it.<br>
+If our ray **does** intersect we will also get the time along the ray where it enters the grid called `entry_t`.
 
 ```cpp
 /**
@@ -261,7 +261,7 @@ Let's start with 2 important variables which will <span class="highlight">remain
 ) }}
 
 The <span class="highlight">first variable</span> `step` will be used to move through the grid along the ray direction.<br>
-Computed for each axis, if the ray direction axis is **<span class="success">positive</span>** it is `1`  and `-1` if **<span class="error">negative</span>**.<br>
+Computed for each axis, if the ray direction axis is **positive** it is `1`  and `-1` if **negative**.<br>
 Here's what that would look like in C++:
 
 ```cpp
