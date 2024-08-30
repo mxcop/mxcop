@@ -16,13 +16,13 @@ color = "amber"
 
 ## Introduction
 
-In this article we will dive deep into [Amanatides and Woo's fast voxel traversal algorithm](https://www.researchgate.net/publication/2611491_A_Fast_Voxel_Traversal_Algorithm_for_Ray_Tracing).<br>
-Designed for, however not limited to, <span class="highlight">ray tracing</span> voxel grids.<br>
+In this article we will dive deep into [Amanatides and Woo's fast voxel traversal algorithm](https://www.researchgate.net/publication/2611491_A_Fast_Voxel_Traversal_Algorithm_for_Ray_Tracing).  
+Designed for, however not limited to, <span class="highlight">ray tracing</span> voxel grids.  
 
-> Most visual examples in this article will be 2D for convenience however, the concepts are the same for 3D.<br>
+> Most visual examples in this article will be 2D for convenience however, the concepts are the same for 3D.  
 > All code snippets provided will be using C++ 20 and will be for 3D voxel traversal.
 
-You may wonder *"What can voxel ray tracing do?"*.<br>
+You may wonder *"What can voxel ray tracing do?"*.  
 Here's two screenshots taken from my own `CPU` voxel ray tracer: 
 
 {{ image_2x1(
@@ -30,14 +30,14 @@ Here's two screenshots taken from my own `CPU` voxel ray tracer:
     src2="/img/articles/amanatides-and-woo/voxel-terrain.png", alt2="Ray traced voxel terrain."
 ) }}
 
-Together we're going to find out how and why this algorithm works.<br>
+Together we're going to find out how and why this algorithm works.  
 *So, let's dive in!*
 
 ---
 
 ## Prerequisites
 
-To get started tracing anything, we need some <span class="highlight">data to traverse</span>!<br>
+To get started tracing anything, we need some <span class="highlight">data to traverse</span>!  
 Let's setup a little `VoxelTracer` class together:
 
 ```cpp
@@ -68,13 +68,13 @@ class VoxelTracer {
 };
 ```
 
-What to fill `grid` with is up to you.<br>
+What to fill `grid` with is up to you.  
 Each voxel in the grid is stored as a color `unsigned int`, RGBA.
 
 > For some inspiration: you could fill it with a noise pattern, like [Perlin noise](https://en.wikipedia.org/wiki/Perlin_noise).
 
-Futhermore, before we start the traversal we need to <span class="highlight">intersect</span> our ray with the <span class="highlight">grid bounding box</span>.<br>
-If our ray **doesn't** intersect the grid then we don't need to traverse it.<br>
+Futhermore, before we start the traversal we need to <span class="highlight">intersect</span> our ray with the <span class="highlight">grid bounding box</span>.  
+If our ray **doesn't** intersect the grid then we don't need to traverse it.  
 If our ray **does** intersect we will also get the time along the ray where it enters the grid called `entry_t`.
 
 ```cpp
@@ -105,10 +105,10 @@ float ray_aabb(const vec3& min, const vec3& max, const vec3& ro, const vec3& rd)
 ```
 <sup>Snippet A.</sup>
 
-*Snippet A* shows a basic <span class="highlight">ray vs aabb</span> intersection test you can use.<br>
+*Snippet A* shows a basic <span class="highlight">ray vs aabb</span> intersection test you can use.  
 It is not an optimal one, nevertheless it will get the job done for now.
 
-We can now put this intersection test at the top of our `find_nearest` function.<br>
+We can now put this intersection test at the top of our `find_nearest` function.  
 And for now, we can just return `entry_t` if there was a hit.
 
 ```cpp
@@ -124,7 +124,7 @@ float VoxelTracer::find_nearest(const vec3& ro, const vec3& rd) const {
 }
 ```
 
-If we shoot a ray for each pixel on screen, and turn the output of `find_nearest` into a grayscale color.<br>
+If we shoot a ray for each pixel on screen, and turn the output of `find_nearest` into a grayscale color.  
 We should get something that looks like this:
 
 {{ image(
@@ -136,11 +136,11 @@ We should get something that looks like this:
 
 ## Traversal Concept
 
-The concept of <span class="highlight">Amanatides and Woo's</span> algorithm is simple:<br>
-We find at what time along the ray each axis crosses its next cell boundary.<br>
+The concept of <span class="highlight">Amanatides and Woo's</span> algorithm is simple:  
+We find at what time along the ray each axis crosses its next cell boundary.  
 The maximum time until we cross the next axis cell boundary is often called `tmax`.
 
-At any point in the grid our next step will be on the axis where `tmax` is the smallest.<br>
+At any point in the grid our next step will be on the axis where `tmax` is the smallest.  
 That might sound confusing, to hopefully make it more clear, I made this graphic:
 
 <figure title="Figure A: Amanatides and Woo in action">
@@ -242,17 +242,17 @@ That might sound confusing, to hopefully make it more clear, I made this graphic
     </svg>
 </figure>
 
-We can see that on the <span class="highlight">1st</span> step, `tmax.x` is the smallest, because the `x` axis will cross its cell boundary before the `y` axis.<br>
-Then on the <span class="highlight">2nd</span> step, `tmax.x` was updated and it is now larger than `tmax.y`, therefore the next step is on the `y` axis.<br>
+We can see that on the <span class="highlight">1st</span> step, `tmax.x` is the smallest, because the `x` axis will cross its cell boundary before the `y` axis.  
+Then on the <span class="highlight">2nd</span> step, `tmax.x` was updated and it is now larger than `tmax.y`, therefore the next step is on the `y` axis.  
 
-Now the question is *"How do we calculate `tmax`?"*.<br>
+Now the question is *"How do we calculate `tmax`?"*.  
 That's what we're going to find out next.
 
 ---
 
 ## Traversal Setup
 
-Now that we have our `VoxelTracer`, and we understand the basic concept, we can start implementing the algorithm.<br>
+Now that we have our `VoxelTracer`, and we understand the basic concept, we can start implementing the algorithm.  
 Let's start with 2 important variables which will <span class="highlight">remain constant</span> during traversal:
 
 {{ image_2x1(
@@ -260,8 +260,8 @@ Let's start with 2 important variables which will <span class="highlight">remain
     src2="/img/articles/amanatides-and-woo/delta.png", alt2="Figure C: Delta (reciprocal direction)"
 ) }}
 
-The <span class="highlight">first variable</span> `step` will be used to move through the grid along the ray direction.<br>
-Computed for each axis, if the ray direction axis is **positive** it is `1`  and `-1` if **negative**.<br>
+The <span class="highlight">first variable</span> `step` will be used to move through the grid along the ray direction.  
+Computed for each axis, if the ray direction axis is **positive** it is `1`  and `-1` if **negative**.  
 Here's what that would look like in C++:
 
 ```cpp
@@ -274,7 +274,7 @@ inline vec3 sign_of_dir(const vec3& v) {
 }
 ```
 
-The <span class="highlight">second variable</span> we need is `delta`, it is used to update `tmax` during traversal.<br>
+The <span class="highlight">second variable</span> we need is `delta`, it is used to update `tmax` during traversal.  
 Computed for each axis, it is the **absolute** of `1.0` divided by the ray direction axis, also referred to as the reciprocal.
 
 Now there's just 2 more variables left, these variables will be updated <span class="highlight">every step</span> during traversal.
@@ -363,13 +363,13 @@ Now there's just 2 more variables left, these variables will be updated <span cl
 </figure>
 </div>
 
-The <span class="highlight">third variable</span> is our `pos` within the grid, we need to initialize it to our entry point in the grid.<br>
-This is very easy to do, we simply make sure our entry point is in grid space *(1 unit = 1 grid cell)*<br>
+The <span class="highlight">third variable</span> is our `pos` within the grid, we need to initialize it to our entry point in the grid.  
+This is very easy to do, we simply make sure our entry point is in grid space *(1 unit = 1 grid cell)*  
 And then we truncate the floating entry point to get our entry grid position as seen in *Figure D*.
 > It's also important to `clamp` the `pos` within the grid just in case.
 
-Now for the <span class="highlight">last variable</span> we need the mysterious `tmax` which will let us correctly determine the next step.<br>
-To initialize it, we get the offset between the grid `pos` and the entry point,<br>
+Now for the <span class="highlight">last variable</span> we need the mysterious `tmax` which will let us correctly determine the next step.  
+To initialize it, we get the offset between the grid `pos` and the entry point,  
 add only the positive part of our `step`, and finally divide by the ray direction `rd`.
 
 ```cpp
@@ -384,11 +384,11 @@ const vec3 entry_pos = ((ro + rd * (entry_t + 0.0001f)) - grid_min) * voxels_per
 vec3 tmax = (pos - entry_pos + max(step, 0)) / rd;
 ```
 
-Adding only the positive part of our `step` is important because each grid cells origin lies in its top left.<br>
-So when our ray is moving in the positive direction, we need to adjust for that fact,<br>
+Adding only the positive part of our `step` is important because each grid cells origin lies in its top left.  
+So when our ray is moving in the positive direction, we need to adjust for that fact,  
 while in the negative direction it is already correct.
 
-Dividing by the ray direction is done to transform our `tmax` into the *"ray direction space"*.<br>
+Dividing by the ray direction is done to transform our `tmax` into the *"ray direction space"*.  
 This is important because later we will be updating `tmax` using our `delta`.
 
 **Finally!** We have everything setup, and we're ready to start traversing!
@@ -397,8 +397,8 @@ This is important because later we will be updating `tmax` using our `delta`.
 
 ## Traversal
 
-Now that everything is already setup for us, we get to the easiest part, the <span class="highlight">actual traversal</span>.<br>
-As I mentioned in the *Concept* part of the article, we will simply step based on the smallest axis of `tmax`.<br>
+Now that everything is already setup for us, we get to the easiest part, the <span class="highlight">actual traversal</span>.  
+As I mentioned in the *Concept* part of the article, we will simply step based on the smallest axis of `tmax`.  
 And after every step, we update our `pos` and `tmax`.
 
 ```cpp
@@ -446,15 +446,16 @@ for (...) {
 ```
 <sup>Snippet B.</sup>
 
-In *Snippet B*, we also track `axis`, the previous axis we stepped on.<br>
-Because when we hit something, we want to return the <span class="highlight">time of intersection</span> with whatever we hit.<br>
-Which is the previous `tmax` along the previously stepped `axis`.
+In *Snippet B*, we also track `axis`, the previous axis we stepped on.  
+Because when we hit something, we want to return the <span class="highlight">time of intersection</span> with whatever we hit.  
+Which is the previous `tmax` along the previously stepped `axis`.  
+We can go back one *step* by subtracting `delta[axis]` from `tmax[axis]`:
 
 ```cpp
 entry_t + (tmax[axis] - delta[axis]) / voxels_per_unit[axis]
 ```
 
-> Except if `steps == 0` that means we hit a voxel on the edge of the volume, so we just return `entry_t` instead.
+> Except if `steps == 0` that means we hit a voxel on the edge of the grid, so we just return `entry_t` instead.
 
 And that's it, that's the entire algorithm implemented and <span class="highlight">ready to go</span>!
 
@@ -537,7 +538,7 @@ float VoxelTracer::find_nearest(const vec3& ro, const vec3& rd) const {
 }
 ```
 
-And when we once again shoot a ray for each pixel into the scene.<br>
+And when we once again shoot a ray for each pixel into the scene.  
 We get to finally see some <span class="highlight">voxels on screen</span>!
 
 {{ image(
@@ -548,8 +549,8 @@ We get to finally see some <span class="highlight">voxels on screen</span>!
 ---
 
 ## Wrapping Up
-<span class="highlight">Thank you</span> for reading all the way to the end, I hope you now have a better understanding of the algorithm.<br>
+<span class="highlight">Thank you</span> for reading all the way to the end, I hope you now have a better understanding of the algorithm.  
 And I hope you enjoyed reading this article.
 
-If you have anymore questions, or you found something incorrect in the article, let [me](https://twitter.com/mxacop) know on Twitter (X).<br>
+If you have anymore questions, or you found something incorrect in the article, let [me](https://twitter.com/mxacop) know on Twitter (X).  
 *Also feel free to send me pictures of your voxel traversal working! :)*
