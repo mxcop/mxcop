@@ -33,62 +33,10 @@
     <main>
         {% block content %}
         {% include "sections/home.html" %}
-        <!-- {% set section = get_section(path="articles/_index.md") %}
-        <div class="posts">
-            {% for page in section.pages | reverse %}
-            <article class="post">
-                <header>
-                    <h2>
-                        <i class="ico article-link"></i>
-                        {{ page.title | safe }}
-                    </h2>
-                    <div class="tags">
-                        {% if page.extra.tags %}
-                        {% for tag in page.extra.tags %}
-                        <p class="tag {{ tag.color }}">{{ tag.name | safe }}</p>
-                        {% endfor %}
-                        {% endif %}
-                    </div>
-                </header>
-
-                <footer>
-                    <p class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</p>
-                </footer>
-
-                <a class="post-link" href="{{ page.permalink }}"></a>
-            </article>
-            {% endfor %}
-        </div>
-
-        {% set section = get_section(path="blog/_index.md") %}
-        <div class="posts">
-            {% for page in section.pages %}
-            <article class="post">
-                <header>
-                    <h2>
-                        <i class="ico blog-link"></i>
-                        {{ page.title | safe }}
-                    </h2>
-                    <div class="tags">
-                        {% if page.extra.tags %}
-                        {% for tag in page.extra.tags %}
-                        <p class="tag {{ tag.color }}">{{ tag.name | safe }}</p>
-                        {% endfor %}
-                        {% endif %}
-                    </div>
-                </header>
-
-                <footer>
-                    <p>{{ page.description }}</p>
-                    <p class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</p>
-                </footer>
-
-                <a class="post-link" href="{{ page.permalink }}"></a>
-            </article>
-            {% endfor %}
-        </div> -->
         {% endblock content %}
     </main>
+
+    {% include "partials/footer.html" %}
 
 </body>
 

@@ -1,9 +1,20 @@
 {% extends "index.html" %}
 
+<!-- Includes -->
+{% block head %}
+
+<!-- CSS -->
+<link rel="stylesheet" href="{{ get_url(path="sections/post.css", trailing_slash=false) }}">
+
+{% endblock head %}
+
+<!-- Content -->
 {% block content %}
 <div class="post">
     <h1 class="post-title">{{ page.title }}</h1>
-    <span class="post-date">{{ page.date | date(format="%Y-%m-%d") }}</span>
+    <span class="post-sub">
+        {% include "partials/post-meta.html" %}
+    </span>
     {{ page.content | safe }}
 </div>
 {% endblock content %}

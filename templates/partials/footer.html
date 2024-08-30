@@ -1,0 +1,17 @@
+<footer class="site-footer">
+    <p class="end-msg" id="end-msg">---- Thanks for reading! ----</p>
+    <i>© 2020-<span id="year">2024</span> Max &lt;mxcop&gt;, All rights reserved</i>
+</footer>
+
+<script>
+    
+const end_msg = document.getElementById('end-msg');
+const msg_idx = Math.floor(Math.random() * 4);
+const msg_arr = ["Thanks for reading!", "Hope you enjoyed it!", "Hope you learned something!", "Have a great day!"];
+
+end_msg.innerText = "---- " + msg_arr[msg_idx] + " ----";
+
+const year_el = document.getElementById('year');
+year_el.innerText = new Date().getFullYear();
+            
+</script>

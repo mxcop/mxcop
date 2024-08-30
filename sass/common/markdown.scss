@@ -3,6 +3,10 @@ a {
     color: var(--c-link);
 }
 
+h1, h2, h3 {
+    line-height: 36px;
+}
+
 hr {
     color: var(--c-text-3);
     border-width: 1.5px;
@@ -28,10 +32,54 @@ code:not([data-lang]) {
     font-size: 14px;
 }
 
-img {
-    width: auto;
-    height: 320px;
+pre {
+    background: var(--c-code-bg) !important;
+
+    width: fit-content;
+    font-size: 16px;
+    line-height: 18px;
+    padding: 16px;
     border-radius: 8px;
+
+    max-width: 100%;
+    overflow-x: scroll;
+}
+
+sub, sup {
+    color: var(--c-text-2);
+    font-size: 14px;
+}
+
+.img {  
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--c-text-2);
+
+    i::before {
+        content: "* "
+    }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 16px;
+
+    border: 4px solid var(--c-panel-1);
+}
+
+span.error {
+    color: var(--c-error);
+}
+
+span.success {
+    color: var(--c-success);
+}
+
+span.highlight {
+    color: var(--c-high);
 }
 
 
@@ -40,6 +88,7 @@ img {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 1rem;
     width: fit-content;
 }

@@ -1,0 +1,17 @@
+{% set meta = [] %}
+
+{% set post_date = page.date | date(format="%Y-%m-%d") %}
+
+{% if page.updated %}
+    {% set update_date = page.updated | date(format="%Y-%m-%d") %}
+    {% set meta = meta | concat(with='<i title="Originally posted on ' ~ post_date ~ '.">' ~ update_date ~ "</i>") %}
+{% else %}
+    {% set meta = meta | concat(with=post_date) %}
+{% endif %}
+
+{% set meta = meta | concat(with=page.word_count ~ " words") %}
+{% set meta = meta | concat(with=page.reading_time ~ " min") %}
+
+{% set meta = meta | concat(with=page.authors | join(sep=".&nbsp;") | safe) %}
+
+{{ meta | join(sep="&nbsp;•&nbsp;") | safe }}

@@ -4,6 +4,7 @@
 @import "common/markdown";
 
 @import "partials/navbar";
+@import "partials/footer";
 
 * {
     box-sizing: border-box;
@@ -11,6 +12,11 @@
 
 html {
     font-family: "Rubik", sans-serif;
+}
+
+::selection {
+    color: var(--c-bg);
+    background: var(--c-high);
 }
 
 body {
@@ -21,18 +27,16 @@ body {
     flex-direction: column;
 }
 
-pre {
-    padding: 16px;
-    border-radius: 8px;
-    width: fit-content;
-    background: var(--c-code-bg) !important;
-}
-
 main {
     align-self: center;
     width: 100%;
     max-width: calc(1280px - 32px);
     padding: 0 16px;
+
+    margin-top: 2rem;
+    
+    font-size: 16px;
+    line-height: 24px;
 }
 
 .title-soft {

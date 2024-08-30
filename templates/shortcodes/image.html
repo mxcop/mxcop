@@ -1,0 +1,8 @@
+<div class="img">
+    {% if width %}
+    <img src="{{src}}" width="{{width}}" alt="{{alt | safe}}" title="{{alt | safe}}">
+    {% else %}
+    <img src="{{src}}" width="360px" alt="{{alt | safe}}" title="{{alt | safe}}">
+    {% endif %}
+    <i>{{alt | safe}}</i>
+</div>
