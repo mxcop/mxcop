@@ -11,9 +11,12 @@
 
 .post {
     margin-bottom: 4rem;
+    width: 100%;
 }
 
-main {
-    border-left: 2px solid var(--c-panel-1);
-    border-right: 2px solid var(--c-panel-1);
+@media only screen and (min-width: 1280px) {
+    main {
+        border-left: 2px solid var(--c-panel-1);
+        border-right: 2px solid var(--c-panel-1);
+    }
 }

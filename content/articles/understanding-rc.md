@@ -1,8 +1,8 @@
 +++
 title = "Understanding Radiance Cascades"
-description = "Recently I started to look into Radiance Cascades, here's what I've learned so far."
+description = "For a few months now I've worked with Radiance Cascades, here's my understanding of the method provided by the paper."
 authors = [ "Max &lt;mxcop&gt;" ]
-date = 2024-08-17
+date = 2024-08-31
 
 [[extra.tags]]
 name = "graphics"
@@ -41,15 +41,15 @@ Let us begin by making **two** key observations:
 
 ### Angular Observation
 
-{{ video_loop(file = "/anim/articles/understanding-rc/angular-anim.mp4", alt = "Figure A: Circular light source with a radiance probe.", width = "540px") }}
+{{ video_loop(file = "/anim/articles/understanding-rc/angular-anim.mp4", alt = "Figure A: Circular object with a radiance probe.", width = "540px") }}
 
-*Figure A*, depicts a <span class="highlight">circular light source</span> on the left, with a radiance probe to the right of it.  
+*Figure A*, depicts a <span class="highlight">circular object</span> on the left, with a radiance probe to the right of it.  
 The radiance probe has an angular resolution which can be defined as the number of evenly spaced rays it evaluates. *(Shown in blue)*  
 As the radiance probe moves <span class="highlight">further away</span> from the light source, we can see that it's <span class="highlight">angular resolution</span> becomes insufficient.
 
 What we can observe here is that the minimum angular resolution we can get away with for a probe, depends on **two** factors:
-1. $ D $ The <span class="highlight">distance</span> to the furthest light source.
-2. $ w $ The <span class="highlight">size</span> of the smallest light source.
+1. $ D $ The <span class="highlight">distance</span> to the furthest object.
+2. $ w $ The <span class="highlight">size</span> of the smallest object.
 
 In the [paper](https://github.com/Raikiri/RadianceCascadesPaper) this restriction is formalized with this equation: $ \Delta_\omega < w/D $  
 Which states our angular resolution $ \Delta_\omega $ should be smaller than the <span class="highlight">minimum angular resolution</span> $ w/D $.
@@ -59,11 +59,11 @@ Which states our angular resolution $ \Delta_\omega $ should be smaller than the
 {{ video_loop(file = "/anim/articles/understanding-rc/spatial-anim.mp4", alt = "Figure B: Penumbra created by line light and line occluder.", width = "540px") }}
 
 *Figure B*, shows that we can resolve a penumbra by <span class="highlight">interpolating</span> between 2 probes. *(Shown as blue dots)*  
-The spacing of these probes increases the further away from the light source we get.
+The spacing of these probes increases the further away from the objects we get.
 
 We can observe that the probe spacing is dependent on **two** factors:
-1. $ D $ The <span class="highlight">distance</span> to the closest light source / occluder.
-2. $ w $ The <span class="highlight">size</span> of the largest light source / occluder.
+1. $ D $ The <span class="highlight">distance</span> to the closest object.
+2. $ w $ The <span class="highlight">size</span> of the largest object.
 
 > Does that not sound familiar?
 
@@ -71,7 +71,7 @@ It's the **inverse** of the angular observation!
 
 ### Penumbra Condition
 
-While the angular resolution $ \Delta_\omega $ increases the spatial resolution $ \Delta_p $ decreases and vice versa.  
+While the angular resolution $ \Delta_\omega $ increases, the spatial resolution $ \Delta_p $ decreases and vice versa.  
 They are <span class="highlight">inversely proportional</span>.
 
 In the [paper](https://github.com/Raikiri/RadianceCascadesPaper) this relationship is formalized as the <span class="highlight">penumbra condition</span> with this equation:
