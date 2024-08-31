@@ -59,7 +59,7 @@ sub, sup {
     font-size: 14px;
 }
 
-.img {  
+.img, .video {  
     width: fit-content;
     display: flex;
     flex-direction: column;
@@ -71,7 +71,7 @@ sub, sup {
     }
 }
 
-img {
+img, video {
     max-width: 100%;
     height: auto;
     border-radius: 16px;
@@ -92,13 +92,6 @@ span.highlight {
     justify-content: center;
     gap: 1rem;
     width: fit-content;
-}
-
-.video {
-    width: auto;
-    height: 320px;
-
-    border-radius: 8px;
 }
 
 

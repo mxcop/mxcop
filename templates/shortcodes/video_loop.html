@@ -1,4 +1,17 @@
-<video class="video" autoplay loop>
-    <source src="{{file}}" type="video/mp4">
-    Video tag is not supported.
-</video> 
+<div class="video">
+    {% if width %}
+    <video style="width: {{width}}" class="video" autoplay loop>
+        <source src="{{file}}" type="video/mp4">
+        Video tag is not supported.
+    </video> 
+    {% else %}
+    <video style="width: 360px" class="video" autoplay loop>
+        <source src="{{file}}" type="video/mp4">
+        Video tag is not supported.
+    </video> 
+    {% endif %}
+    
+    {% if alt %}
+    <i>{{alt | safe}}</i>
+    {% endif %}
+</div>
