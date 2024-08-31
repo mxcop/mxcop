@@ -56,7 +56,56 @@ Which states our angular resolution $ \Delta_\omega $ should be smaller than the
 
 ### Spatial Observation
 
-...
+{{ video_loop(file = "/anim/articles/understanding-rc/spatial-anim.mp4", alt = "Figure B: Penumbra created by line light and line occluder.", width = "540px") }}
+
+*Figure B*, shows that we can resolve a penumbra by <span class="highlight">interpolating</span> between 2 probes. *(Shown as blue dots)*  
+The spacing of these probes increases the further away from the light source we get.
+
+We can observe that the probe spacing is dependent on **two** factors:
+1. $ D $ The <span class="highlight">distance</span> to the closest light source / occluder.
+2. $ w $ The <span class="highlight">size</span> of the largest light source / occluder.
+
+> Does that not sound familiar?
+
+It's the **inverse** of the angular observation!  
+
+### Penumbra Condition
+
+While the angular resolution $ \Delta_\omega $ increases the spatial resolution $ \Delta_p $ decreases and vice versa.  
+They are <span class="highlight">inversely proportional</span>.
+
+In the [paper](https://github.com/Raikiri/RadianceCascadesPaper) this relationship is formalized as the <span class="highlight">penumbra condition</span> with this equation:
+
+$
+\begin{cases}
+    \Delta_p <\sim D, \\\\
+    \Delta_\omega <\sim 1/D
+\end{cases}
+$
+> Because $ w $ would be the same for all probes in the scene, we omit it here.
+
+---
+
+## Data Structure
+
+> Explain how we split probes into rings to exploit the angular and spatial observations.
+> Explain the idea of cascades and the cascade hierarchy.
+
+> Show how we can store the cascades as textures.
+
+---
+
+## Merging
+
+> Explain the idea of merging for low-frequency diffuse lighting.
+
+> Show code for the merge process.
+
+---
+
+## Results
+
+> Show results.
 
 ---
 
