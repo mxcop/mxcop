@@ -1,0 +1,50 @@
+<div class="img2x1">
+    {% if width1 %} {% if width2 %}
+    
+    <div class="video">
+        <video style="width: {{width1}}" class="video" autoplay loop>
+            <source src="{{src1}}" type="video/mp4">
+            Video tag is not supported.
+        </video>
+        
+        <i>{{alt1 | safe}}</i>
+    </div>
+    <div class="img">
+        <img src="{{src2}}" width="{{width2}}" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
+        <i>{{alt2 | safe}}</i>
+    </div>
+
+    {% else %}
+    
+    <div class="video">
+        <video style="width: {{width1}}" class="video" autoplay loop>
+            <source src="{{src1}}" type="video/mp4">
+            Video tag is not supported.
+        </video>
+        
+        <i>{{alt1 | safe}}</i>
+    </div>
+    <div class="img">
+        <img src="{{src2}}" width="{{width1}}" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
+        <i>{{alt2 | safe}}</i>
+    </div>
+    
+    {% endif %}
+
+    {% else %}
+    
+    <div class="video">
+        <video style="width: 360px" class="video" autoplay loop>
+            <source src="{{src1}}" type="video/mp4">
+            Video tag is not supported.
+        </video>
+        
+        <i>{{alt1 | safe}}</i>
+    </div>
+    <div class="img">
+        <img src="{{src2}}" width="360px" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
+        <i>{{alt2 | safe}}</i>
+    </div>
+
+    {% endif %}
+</div>
