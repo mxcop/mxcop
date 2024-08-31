@@ -28,8 +28,10 @@ body {
 }
 
 main {
+    display: grid;
     align-self: center;
     width: 100%;
+    min-height: 100vh;
     max-width: calc(1280px - 32px);
     padding: 2rem 32px;
 
