@@ -143,7 +143,7 @@ The maximum time until we cross the next axis cell boundary is often called `tma
 At any point in the grid our next step will be on the axis where `tmax` is the smallest.  
 That might sound confusing, to hopefully make it more clear, I made this graphic:
 
-{{ video_loop(file = "/anim/articles/amanatides-and-woo/project.mp4", alt = "Figure A: Amanatides and Woo in action") }}
+{{ video_loop(file = "/anim/articles/amanatides-and-woo/walk-anim.mp4", alt = "Figure A: Amanatides and Woo in action") }}
 
 We can see that on the <span class="highlight">1st</span> step, `tmax.x` is the smallest, because the `x` axis will cross its cell boundary before the `y` axis.  
 Then on the <span class="highlight">2nd</span> step, `tmax.x` was updated and it is now larger than `tmax.y`, therefore the next step is on the `y` axis.  
