@@ -1,5 +1,6 @@
 <div class="latest">
     <!-- Latest blog post -->
+    {% if false %}
     {% set blog_section = get_section(path="blog/_index.md") %}
     {% set blog_post = blog_section.pages | first %}
     <h2 class="title-soft">Latest blog post</h2>
@@ -25,6 +26,7 @@
 
         <a class="post-link" href="{{ blog_post.permalink }}"></a>
     </article>
+    {% endif %}
 
     <!-- Latest article post -->
     {% set article_section = get_section(path="articles/_index.md") %}

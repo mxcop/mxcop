@@ -1,7 +1,18 @@
 {% extends "index.html" %}
 
+{% block title %}{{page.title}}{% endblock title %}
+{% block description %}{{page.description}}{% endblock description %}
+
 <!-- Includes -->
 {% block head %}
+
+{% if page.authors %}
+<meta name="author" content="{{ page.authors | join(sep=",&nbsp;") | safe }}"/>
+{% endif %}
+
+{% if page.extra.tags %}
+<meta name="keywords" content="{{ page.extra.tags | map(attribute="name") | join(sep=",&nbsp;") | safe }}"/>
+{% endif %}
 
 <!-- CSS -->
 <link rel="stylesheet" href="{{ get_url(path="sections/post.css", trailing_slash=false) }}">

@@ -1,5 +1,5 @@
 +++
-title = "articles"
+title = "Articles"
 sort_by = "date"
 
 [extra]

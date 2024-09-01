@@ -3,6 +3,7 @@ title = "Fundamentals of Radiance Cascades"
 description = "For a few months now I've worked with Radiance Cascades, here's my understanding of the fundamentals provided by the paper."
 authors = [ "Max &lt;mxcop&gt;" ]
 date = 2024-08-31
+draft = true
 
 [[extra.tags]]
 name = "graphics"
