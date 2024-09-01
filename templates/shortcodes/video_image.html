@@ -3,14 +3,14 @@
     
     <div class="video">
         <video style="width: {{width1}}" class="video" autoplay loop>
-            <source src="{{src1}}" type="video/mp4">
+            <source src="{{ get_url(path = src1) }}" type="video/mp4">
             Video tag is not supported.
         </video>
         
         <i>{{alt1 | safe}}</i>
     </div>
     <div class="img">
-        <img src="{{src2}}" width="{{width2}}" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
+        <img src="{{ get_url(path = src2) }}" width="{{width2}}" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
         <i>{{alt2 | safe}}</i>
     </div>
 
@@ -18,14 +18,14 @@
     
     <div class="video">
         <video style="width: {{width1}}" class="video" autoplay loop>
-            <source src="{{src1}}" type="video/mp4">
+            <source src="{{ get_url(path = src1) }}" type="video/mp4">
             Video tag is not supported.
         </video>
         
         <i>{{alt1 | safe}}</i>
     </div>
     <div class="img">
-        <img src="{{src2}}" width="{{width1}}" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
+        <img src="{{ get_url(path = src2) }}" width="{{width1}}" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
         <i>{{alt2 | safe}}</i>
     </div>
     
@@ -35,14 +35,14 @@
     
     <div class="video">
         <video style="width: 360px" class="video" autoplay loop>
-            <source src="{{src1}}" type="video/mp4">
+            <source src="{{ get_url(path = src1) }}" type="video/mp4">
             Video tag is not supported.
         </video>
         
         <i>{{alt1 | safe}}</i>
     </div>
     <div class="img">
-        <img src="{{src2}}" width="360px" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
+        <img src="{{ get_url(path = src2) }}" width="360px" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
         <i>{{alt2 | safe}}</i>
     </div>
 

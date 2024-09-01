@@ -2,22 +2,22 @@
     {% if width1 %} {% if width2 %}
     
     <div class="img">
-        <img src="{{src1}}" width="{{width1}}" alt="{{alt1 | safe}}" title="{{alt1 | safe}}">
+        <img src="{{ get_url(path = src1) }}" width="{{width1}}" alt="{{alt1 | safe}}" title="{{alt1 | safe}}">
         <i>{{alt1 | safe}}</i>
     </div>
     <div class="img">
-        <img src="{{src2}}" width="{{width2}}" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
+        <img src="{{ get_url(path = src2) }}" width="{{width2}}" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
         <i>{{alt2 | safe}}</i>
     </div>
 
     {% else %}
     
     <div class="img">
-        <img src="{{src1}}" width="{{width1}}" alt="{{alt1 | safe}}" title="{{alt1 | safe}}">
+        <img src="{{ get_url(path = src1) }}" width="{{width1}}" alt="{{alt1 | safe}}" title="{{alt1 | safe}}">
         <i>{{alt1 | safe}}</i>
     </div>
     <div class="img">
-        <img src="{{src2}}" width="{{width1}}" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
+        <img src="{{ get_url(path = src2) }}" width="{{width1}}" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
         <i>{{alt2 | safe}}</i>
     </div>
     
@@ -26,11 +26,11 @@
     {% else %}
     
     <div class="img">
-        <img src="{{src1}}" width="360px" alt="{{alt1 | safe}}" title="{{alt1 | safe}}">
+        <img src="{{ get_url(path = src1) }}" width="360px" alt="{{alt1 | safe}}" title="{{alt1 | safe}}">
         <i>{{alt1 | safe}}</i>
     </div>
     <div class="img">
-        <img src="{{src2}}" width="360px" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
+        <img src="{{ get_url(path = src2) }}" width="360px" alt="{{alt2 | safe}}" title="{{alt2 | safe}}">
         <i>{{alt2 | safe}}</i>
     </div>
 
