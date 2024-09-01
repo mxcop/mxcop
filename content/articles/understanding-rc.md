@@ -37,41 +37,45 @@ Furthermore there are already plenty of clever ways to get it's performance to a
 
 ## Observations
 
-Let us begin by making **two** key observations:
+Radiance Cascades is build on **two** key observations, which we will exploit.  
+So first, let's observe these together, and have a <span class="highlight">quick recap</span> afterwards.
 
 ### Angular Observation
 
 {{ video_loop(file = "/anim/articles/understanding-rc/angular-anim.mp4", alt = "Figure A: Circular object with a radiance probe.", width = "540px") }}
 
 *Figure A*, depicts a <span class="highlight">circular object</span> on the left, with a radiance probe to the right of it.  
-The radiance probe has an angular resolution which can be defined as the number of evenly spaced rays it evaluates. *(Shown in blue)*  
+The radiance probe has an angular resolution which can be defined as the angle between its evenly spaced rays. *(Shown in blue)*  
 As the radiance probe moves <span class="highlight">further away</span> from the light source, we can see that it's <span class="highlight">angular resolution</span> becomes insufficient.
 
-What we can observe here is that the minimum angular resolution we can get away with for a probe, depends on **two** factors:
+What we can observe here is that the maximum angle between rays we can get away with for a probe, depends on **two** factors:
 1. $ D $ The <span class="highlight">distance</span> to the furthest object.
 2. $ w $ The <span class="highlight">size</span> of the smallest object.
 
 In the [paper](https://github.com/Raikiri/RadianceCascadesPaper) this restriction is formalized with this equation: $ \Delta_\omega < w/D $  
-Which states our angular resolution $ \Delta_\omega $ should be smaller than the <span class="highlight">minimum angular resolution</span> $ w/D $.
+Which states that the angle between our evenly spaced rays $ \Delta_\omega $ should be smaller than $ w/D $.
 
 ### Spatial Observation
 
 {{ video_loop(file = "/anim/articles/understanding-rc/spatial-anim.mp4", alt = "Figure B: Penumbra created by line light and line occluder.", width = "540px") }}
 
-*Figure B*, shows that we can resolve a penumbra by <span class="highlight">interpolating</span> between 2 probes. *(Shown as blue dots)*  
-The spacing of these probes increases the further away from the objects we get.
+*Figure B*, shows that we can resolve a penumbra by <span class="highlight">interpolating</span> between only 2 probes. *(Shown as blue dots)*  
+The spacing of these probes can be increased the further away we get from all objects in the scene.
 
+{{ video_loop(file = "/anim/articles/understanding-rc/penumbra-anim.mp4", alt = "Figure C: Moving the line occluder around.", width = "540px") }}
+
+*Figure C*, shows that regardless of the distance between the light and the occluder, the penumbra still grows with distance.  
 We can observe that the probe spacing is dependent on **two** factors:
 1. $ D $ The <span class="highlight">distance</span> to the closest object.
-2. $ w $ The <span class="highlight">size</span> of the largest object.
+2. $ w $ The <span class="highlight">size</span> of the smallest object.
 
 > Does that not sound familiar?
 
-It's the **inverse** of the angular observation!  
+The <span class="highlight">distance</span> is the **inverse** of the angular observation!  
 
 ### Penumbra Condition
 
-While the angular resolution $ \Delta_\omega $ increases, the spatial resolution $ \Delta_p $ decreases and vice versa.  
+While the maximum angle between rays ($ \Delta_\omega $) decreases, the maximum distance between probes ($ \Delta_p $) increases and vice versa.  
 They are <span class="highlight">inversely proportional</span>.
 
 In the [paper](https://github.com/Raikiri/RadianceCascadesPaper) this relationship is formalized as the <span class="highlight">penumbra condition</span> with this equation:
@@ -82,7 +86,20 @@ $
     \Delta_\omega <\sim 1/D
 \end{cases}
 $
-> Because $ w $ would be the same for all probes in the scene, we omit it here.
+> $ A <\sim B $ means that; $ A $ is less than the output of some function, which scales linearly with $ B $.
+
+$ w $ is not included in the <span class="highlight">penumbra condition</span> because it is the same at all points in the scene.  
+We can also observe that the required angular & spatial resolution both increase when $ w $ decreases.  
+Because we need higher resolution for both in order to resolve the smallest object in the scene.
+
+### Recap
+
+Ok, these <span class="highlight">observations</span> took me some time to *wrap my head around* but they're key to understanding RC.  
+*So let's have a quick recap.*  
+
+What we've <span class="highlight">observed</span> is that the **further** we are from all objects in the scene:
+1. The **less** spatial resolution we need. *(e.g. the larger spacing can be between probes)*
+2. The **more** angular resolution we need. *(e.g. the more evenly spaced rays we need per probe)*
 
 ---
 
