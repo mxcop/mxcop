@@ -3,7 +3,6 @@ title = "Fundamentals of Radiance Cascades"
 description = "For a few months now I've worked with Radiance Cascades, here's my understanding of the fundamentals provided by the paper."
 authors = [ "Max &lt;mxcop&gt;" ]
 date = 2024-08-31
-draft = true
 
 [[extra.tags]]
 name = "graphics"
@@ -41,7 +40,7 @@ Furthermore there are already plenty of clever ways to get it's performance to a
 
 ## Observations
 
-Radiance Cascades is build on **two** key observations, which we will exploit.  
+Radiance Cascades is build on **two** key observations.  
 So first, let's observe these together, and have a <span class="highlight">quick recap</span> afterwards.
 
 ### Angular Observation
@@ -68,7 +67,9 @@ The spacing of these probes can be increased the further away we get from all ob
 
 {{ video_loop(file = "/anim/articles/fundamental-rc/penumbra-anim.mp4", alt = "Figure C: Moving the line occluder around.", width = "540px") }}
 
-*Figure C*, shows that regardless of the distance between the light and the occluder, the penumbra still grows with distance.  
+*Figure C*, shows that regardless of the distance between the light and the occluder, the penumbra still <span class="highlight">grows with distance</span>.  
+However, the sharpness of the penumbra changes, RC is notoriously bad at representing *very* sharp shadows. 
+
 We can observe that the probe spacing is dependent on **two** factors:
 1. $ D $ The <span class="highlight">distance</span> to the closest object.
 2. $ w $ The <span class="highlight">size</span> of the smallest object.
@@ -77,9 +78,9 @@ We can observe that the probe spacing is dependent on **two** factors:
 
 The <span class="highlight">distance</span> is the **inverse** of the angular observation!  
 
-### Penumbra Condition
+### Penumbra Condition / Theorem
 
-While the maximum angle between rays ($ \Delta_\omega $) decreases, the maximum distance between probes ($ \Delta_p $) increases and vice versa.  
+While the required angle between rays ($ \Delta_\omega $) decreases, the required distance between probes ($ \Delta_p $) increases and vice versa.  
 They are <span class="highlight">inversely proportional</span>.
 
 In the [paper](https://github.com/Raikiri/RadianceCascadesPaper) this relationship is formalized as the <span class="highlight">penumbra condition</span> with this equation:
@@ -101,17 +102,38 @@ Because we need higher resolution for both in order to resolve the smallest obje
 Ok, these <span class="highlight">observations</span> took me some time to *wrap my head around* but they're key to understanding RC.  
 *So let's have a quick recap.*  
 
-What we've <span class="highlight">observed</span> is that the **further** we are from all objects in the scene:
-1. The **less** spatial resolution we need. *(e.g. the larger spacing can be between probes)*
-2. The **more** angular resolution we need. *(e.g. the more evenly spaced rays we need per probe)*
+What we've <span class="highlight">observed</span> is that the **further** we are from the closest object in the scene:
+1. The **less** spatial resolution we need. *(e.g. the <span class="highlight">larger spacing</span> can be between probes)*
+2. The **more** angular resolution we need. *(e.g. the <span class="highlight">more rays</span> we need per probe)*
 
 ---
 
 ## Data Structure
 
-> Explain how we split probes into rings to exploit the angular and spatial observations.
-> Explain the idea of cascades and the cascade hierarchy.
+Now that we've made the observations and defined the penumbra theorem, let's look at how we can <span class="highlight">exploit</span> these observations.
 
+### Angular
+
+We've got a **problem**: normal probes we're all used to, can hit objects at <span class="highlight">virtually any distance</span>.  
+In order to exploit the <span class="highlight">penumbra theorem</span> we need some way for <span class="highlight">narrowing</span> this possible <span class="highlight">distance window</span>.
+
+> [Figure D: graphic showing probe being split into rings]
+
+*Figure D*, shows one way of narrowing this window, we can split our probes into rings.  
+By doing this we **not only** know that each ring will hit within a narrow distance window.  
+We can also <span class="highlight">vary</span> the <span class="highlight">angular resolution</span> between rings!
+
+This is exactly what we're looking for to <span class="highlight">exploit</span> the <span class="highlight">angular part</span> of the penumbra theorem.  
+We can increase the ray count *(aka, decrease the angle between rays)* with each consecutive ring that hits objects further away.
+
+> Explain how we can create cascades from these rings, each cascade with its own distance window.
+
+### Spatial
+
+> Explain how we can change the number of probes in each cascade to exploit the spatial observation.
+
+
+> Explain the idea of cascades and the cascade hierarchy.
 > Show how we can store the cascades as textures.
 
 ---
