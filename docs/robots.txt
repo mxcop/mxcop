@@ -1,4 +1,4 @@
 User-agent: *
 Disallow:
 Allow: /
-Sitemap: https://mxcop.github.io/mxcop/sitemap.xml
+Sitemap: https://m4xc.dev/sitemap.xml
