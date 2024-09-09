@@ -108,14 +108,14 @@ What we've <span class="highlight">observed</span> is that the **further** we ar
 
 ---
 
-## Data Structure
+## Exploiting Observations
 
 Now that we've made the observations and defined the penumbra theorem, let's look at how we can <span class="highlight">exploit</span> these observations.
 
 ### Angular
 
 We've got a **problem**: normal probes we're all used to, can hit objects at <span class="highlight">virtually any distance</span>.  
-In order to exploit the <span class="highlight">penumbra theorem</span> we need some way for <span class="highlight">narrowing</span> this possible <span class="highlight">distance window</span>.
+In order to exploit the <span class="highlight">penumbra theorem</span> we need some way to *narrow* this possible <span class="highlight">distance window</span>.
 
 > [Figure D: graphic showing probe being split into rings]
 
@@ -123,15 +123,31 @@ In order to exploit the <span class="highlight">penumbra theorem</span> we need 
 By doing this we **not only** know that each ring will hit within a narrow distance window.  
 We can also <span class="highlight">vary</span> the <span class="highlight">angular resolution</span> between rings!
 
-This is exactly what we're looking for to <span class="highlight">exploit</span> the <span class="highlight">angular part</span> of the penumbra theorem.  
-We can increase the ray count *(aka, decrease the angle between rays)* with each consecutive ring that hits objects further away.
+> These new rays with a limited range, are referred to as **intervals**.
 
-> Explain how we can create cascades from these rings, each cascade with its own distance window.
+This is exactly what we're looking for to <span class="highlight">exploit</span> the <span class="highlight">angular part</span> of the penumbra theorem.  
+We can increase the interval count *(aka, decrease the angle between rays)* with each consecutive ring that hits objects further away.
+
+> [Figure E: graphic showing probe split into rings next to each other]
+
+In order to still <span class="highlight">capture</span> our entire scene, we will have multiple of these *rings* which we refer to as <span class="highlight">cascades</span>.  
 
 ### Spatial
 
-> Explain how we can change the number of probes in each cascade to exploit the spatial observation.
+So far, with the angular observation we haven't really achieved any <span class="highlight">performance</span> improvements.  
+We're still casting a <span class="highlight">very large number</span> of rays for each probe using this method, *good thing that's about to change.*
 
+> [Figure F: graphic showing 4 cascade 0 and 1 cascade 1 probe overlayed]
+
+*Figure F*, shows one way we can <span class="highlight">exploit</span> the spatial observation, which basically says:  
+We can increase the <span class="highlight">spacing</span> between probes at further distances.
+
+With our <span class="highlight">cascades</span> we can now use this method, as it is depicted in *Figure F*.  
+For cascades with a distance window that is *further* away, we can increase the spacing between probes.
+
+### All Together Now!
+
+Now let us properly define the <span class="highlight">cascades</span>.
 
 > Explain the idea of cascades and the cascade hierarchy.
 > Show how we can store the cascades as textures.
@@ -141,6 +157,20 @@ We can increase the ray count *(aka, decrease the angle between rays)* with each
 ## Merging
 
 > Explain the idea of merging for low-frequency diffuse lighting.
+
+### Interval Merging
+
+To resolve the <span class="highlight">diffuse radiance</span> in the scene, we can recursively merge intervals to capture the radiance from a <span class="highlight">cone</span>.  
+The question is: *"How do we merge intervals, and how do we merge them between cascades?"*
+
+> [Figure G: graphic showing intervals making up a cone]
+
+*Figure G, shows a <span class="highlight">cone</span> made out of intervals from different <span class="highlight">cascades</span>.  
+In this case, the number of <span class="highlight">intervals</span> grows by **x4** with each subsequent cascade.  
+Which also means we will <span class="highlight">merge 4</span> intervals from cascade N+1 <span class="highlight">into 1</span> interval of cascade N.
+
+The way we do this is by first <span class="highlight">averaging</span> the 4, N+1 intervals together.  
+Then we can use the following function to merge the averaged interval with the N interval.
 
 > Show code for the merge process.
 
