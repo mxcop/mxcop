@@ -117,7 +117,7 @@ Now that we've made the observations and defined the penumbra theorem, let's loo
 We've got a **problem**: normal probes we're all used to, can hit objects at <span class="highlight">virtually any distance</span>.  
 In order to exploit the <span class="highlight">penumbra theorem</span> we need some way to *narrow* this possible <span class="highlight">distance window</span>.
 
-> [Figure D: graphic showing probe being split into rings]
+{{ video_loop(file = "/anim/articles/fundamental-rc/splitting-anim.mp4", alt = "Figure D: Probe being split into &ldquo;rings&rdquo;.", width = "360px") }}
 
 *Figure D*, shows one way of narrowing this window, we can split our probes into rings.  
 By doing this we **not only** know that each ring will hit within a narrow distance window.  
@@ -128,9 +128,12 @@ We can also <span class="highlight">vary</span> the <span class="highlight">angu
 This is exactly what we're looking for to <span class="highlight">exploit</span> the <span class="highlight">angular part</span> of the penumbra theorem.  
 We can increase the interval count *(aka, decrease the angle between rays)* with each consecutive ring that hits objects further away.
 
-> [Figure E: graphic showing probe split into rings next to each other]
+{{ image(
+    src="/img/articles/understanding-rc/inc-angular-split.png", alt="Figure E: Increasing angular resolution for more distant &ldquo;rings&rdquo;.",
+    width="360px"
+) }}
 
-In order to still <span class="highlight">capture</span> our entire scene, we will have multiple of these *rings* which we refer to as <span class="highlight">cascades</span>.  
+In order to still <span class="highlight">capture</span> our entire scene, we will have many of these *rings*.  
 
 ### Spatial
 
