@@ -135,25 +135,65 @@ We can increase the interval count *(aka, decrease the angle between rays)* with
 
 In order to still <span class="highlight">capture</span> our entire scene, we will have many of these *rings*.  
 
+In the example in *Figure E*, we increase the interval count by **2x** with every consecutive ring.  
+Which let's us increase the <span class="highlight">distance window</span> of each ring *(the length of its intervals)* by that same factor.  
+This ensures the <span class="highlight">gap</span> between intervals remains *approximately* equal between rings.
+
 ### Spatial
 
-So far, with the angular observation we haven't really achieved any <span class="highlight">performance</span> improvements.  
+So far, with the angular observation we haven't really achieved any <span class="highlight">reduction</span> in ray count.  
 We're still casting a <span class="highlight">very large number</span> of rays for each probe using this method, *good thing that's about to change.*
 
-> [Figure F: graphic showing 4 cascade 0 and 1 cascade 1 probe overlayed]
+This is when we <span class="highlight">drop the idea</span> that these rings together make up a **single** probe.  
+Instead let's view each consecutive ring as its own probe, which *can be moved*.
 
-*Figure F*, shows one way we can <span class="highlight">exploit</span> the spatial observation, which basically says:  
-We can increase the <span class="highlight">spacing</span> between probes at further distances.
+> From now on when we refer to **probes**, we are referring to **rings**.
 
-With our <span class="highlight">cascades</span> we can now use this method, as it is depicted in *Figure F*.  
-For cascades with a distance window that is *further* away, we can increase the spacing between probes.
+{{ image(
+    src="/img/articles/understanding-rc/cascade-crown.png", alt="Figure F: 4 blue probes for 1 green probe.",
+    width="360px"
+) }}
 
-### All Together Now!
+*Figure F*, shows one way we can use this new <span class="highlight">perspective</span> on the probes.  
+We saw during the spatial observation that when objects are <span class="highlight">further away</span>, we can have <span class="highlight">larger spacing</span> between probes.
 
-Now let us properly define the <span class="highlight">cascades</span>.
+So, when our <span class="highlight">distance window</span> gets further and further away we may increase the <span class="highlight">spacing</span> between those probes.
 
-> Explain the idea of cascades and the cascade hierarchy.
-> Show how we can store the cascades as textures.
+---
+
+## Cascades
+
+Now that we understand how we can exploit the **two** key observations.  
+Let's put the **two** together and finally define what exactly a <span class="highlight">Cascade</span> is!
+
+{{ image_2x1(
+    src1="/img/articles/understanding-rc/cascade0.png", alt1="Figure G1: Cascade 0, with 4x4 probes.",
+    src2="/img/articles/understanding-rc/cascade1.png", alt2="Figure G2: Cascade 1, with 2x2 probes.",
+    width1="360px", width2="360px"
+) }}
+
+A cascade is basically a <span class="highlight">grid of probes</span>, in which all probes have **equal** properties.  
+*(e.g. interval count, interval length, probe spacing)*
+
+The reason we call them cascades is because they <span class="highlight">cascade outwards</span> with increasing interval count and length.
+
+### Cascade Hierarchy
+
+A cascade hierarchy is what we're really after, we want to **combine** many cascades.  
+For example in *Figure G1 & G2* we can see two cascades that could make up a <span class="highlight">cascade hierarchy</span>.
+
+Most of the time, for <span class="highlight">simplicity</span> sake we will decrease probe count between cascades by **2x** along each axis.  
+Like we've seen also in *Figure G1 & G2*, we will find out why this is convenient later on in this article. 
+
+If we're following the <span class="highlight">penumbra condition</span>, the spatial and angular resolution should be **inversely proportional**.  
+So if we increase probe spacing by **2x** we need to decrease the angle between intervals by **2x** as well. 
+
+> However, there's also many implementation which decrease the angle between intervals by **4x** instead.  
+> It is more costly, but it may produce higher quality results in some cases.
+
+### Cascade Memory
+
+> Explain the most common ways we store cascades in memory. *(textures, position-first vs direction-first)*
 
 ---
 
