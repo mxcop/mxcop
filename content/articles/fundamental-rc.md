@@ -16,7 +16,8 @@ color = "lime"
 ## Introduction
 
 In this article I'm going to share my understanding of the fudamentals of Radiance Cascades. *(abbreviated as RC)*  
-At it's core Radiance Cascades is a method for efficiently representing a <span class="highlight">radiance field</span>.
+At it's core Radiance Cascades is a method for efficiently representing a <span class="highlight">radiance field</span>.  
+Essentially allowing us to represent the <span class="highlight">incoming light</span> from the scene at any point in the scene.
 
 > For the sake of simplicity I will keep the explenations 2D, however RC can be expanded into the third dimension aswell.  
 > I will also assume the reader has a rudimentary understanding of ray tracing & the concept of radiance probes.
@@ -157,14 +158,14 @@ Instead let's view each consecutive ring as its own probe, which *can be moved*.
 *Figure F*, shows one way we can use this new <span class="highlight">perspective</span> on the probes.  
 We saw during the spatial observation that when objects are <span class="highlight">further away</span>, we can have <span class="highlight">larger spacing</span> between probes.
 
-So, when our <span class="highlight">distance window</span> gets further and further away we may increase the <span class="highlight">spacing</span> between those probes.
+So, when our <span class="highlight">distance window</span> gets further and further away, we may increase the <span class="highlight">spacing</span> between those probes.
 
 ---
 
 ## Cascades
 
 Now that we understand how we can exploit the **two** key observations.  
-Let's put the **two** together and finally define what exactly a <span class="highlight">Cascade</span> is!
+Let's put the **two** together and finally define what exactly a <span class="highlight">cascade</span> is!
 
 {{ image_2x1(
     src1="/img/articles/understanding-rc/cascade0.png", alt1="Figure G1: Cascade 0, with 4x4 probes.",
@@ -175,15 +176,17 @@ Let's put the **two** together and finally define what exactly a <span class="hi
 A cascade is basically a <span class="highlight">grid of probes</span>, in which all probes have **equal** properties.  
 *(e.g. interval count, interval length, probe spacing)*
 
-The reason we call them cascades is because they <span class="highlight">cascade outwards</span> with increasing interval count and length.
+The reason we call them cascades is because they <span class="highlight">cascade outwards</span> with increasing interval count and length.  
+*Or at least, that's how I like to think about it.*
 
 ### Cascade Hierarchy
 
-A cascade hierarchy is what we're really after, we want to **combine** many cascades.  
+A cascade <span class="highlight">on its own</span> isn't super useful, only capturing a small part of the scene.  
+Many cascades together is what we're really after, we want to **combine** them into a hierarchy.  
 For example in *Figure G1 & G2* we can see two cascades that could make up a <span class="highlight">cascade hierarchy</span>.
 
 Most of the time, for <span class="highlight">simplicity</span> sake we will decrease probe count between cascades by **2x** along each axis.  
-Like we've seen also in *Figure G1 & G2*, we will find out why this is convenient later on in this article. 
+Like we've seen also in *Figure G1 & G2*, we will find out why this is convenient *later* on in this article. 
 
 If we're following the <span class="highlight">penumbra condition</span>, the spatial and angular resolution should be **inversely proportional**.  
 So if we increase probe spacing by **2x** we need to decrease the angle between intervals by **2x** as well. 
@@ -193,11 +196,90 @@ So if we increase probe spacing by **2x** we need to decrease the angle between 
 
 ### Cascade Memory
 
-> Explain the most common ways we store cascades in memory. *(textures, position-first vs direction-first)*
+{{ video_loop(file = "/anim/articles/fundamental-rc/probe-memory-anim.mp4", alt = "Figure H: 4x4 probe in texture memory.", width = "360px") }}
+
+The most common way we <span class="highlight">store probes</span> in memory is using a **2D texture**.  
+In *Figure H*, we can see one such probe, it has *16* intervals making it *4x4* pixels in memory.  
+Each <span class="highlight">texel</span> representing a single <span class="highlight">direction</span>, shown with the white arrow in the center.
+
+```glsl
+const int dir_count = 16; /* 4x4 */
+const int dir_index = /* ... */;
+
+/* Compute interval direction from direction index */
+float angle = TAU * ((float(dir_index) + 0.5) / float(dir_count));
+vec2 dir    = vec2(cos(angle), sin(angle));
+```
+
+> The *code snippet* above shows how we can derive an interval direction from its index in the probe.
+
+{{ image(
+    src="/img/articles/understanding-rc/cascade-memory.png", alt="Figure I: Cascade in texture memory.",
+    width="360px"
+) }}
+
+Now, of course we're not going to store <span class="highlight">each probe</span> in its own texture.  
+Instead, let's store <span class="highlight">each cascade</span> in a texture, packing the probes together as shown in *Figure I*.
+
+This is where we see why decreasing the probe count by **2x** on <span class="highlight">each axis</span> is nice.  
+It works out *really well* when using this kind of packing.
+
+If we decrease the angle between intervals by **2x** each cascade, each subsequent cascade will have <span class="highlight">half the intervals</span> of the previous.  
+Because the probe count is decreasing by **2x** along 2 axes, making it decrease by **4x**, while the interval count only increases by **2x**.  
+> Meaning our total interval count will aproach **2x** the interval count of the first cascade as we add more cascades.
+
+If instead we decrease the angle between intervals by **4x** each cascade, each cascade will have <span class="highlight">equal the intervals</span>. 
+> Meaning our total interval count will grow linearly with cascade count.
+
+I <span class="highlight">recommend</span> using the **4x** branching method where interval count remains equal, it is <span class="highlight">simpler</span> to work with in practice.
+
+### Cascade Gathering
+
+To gather the <span class="highlight">radiance</span> for each cascade we simply loop over each texel in its memory texture.  
+For each of those texels we *calculate the direction* and cast our interval into the scene.
+
+First, let's find out what our coordinate is within the probe we're apart of:
+```glsl
+/* Get the local texel coordinate in the local probe */
+const ivec2 dir_coord = texel_coord % probe_size;
+```
+
+Second, we can convert this coordinate to a <span class="highlight">direction index</span>:
+```glsl
+/* Convert our local texel coordinate to a direction index */
+const int dir_index = dir_coord.x + dir_coord.y * probe_size.x;
+```
+
+Third, using that direction index we can obtain the direction vector: *(like I showed earlier)*
+```glsl
+const int dir_count = probe_size.x * probe_size.y;
+
+/* Compute interval direction from direction index */
+float angle = TAU * ((float(dir_index) + 0.5) / float(dir_count));
+vec2 dir    = vec2(cos(angle), sin(angle));
+```
+
+Now we have to <span class="highlight">cast the interval</span>, let's not forget intervals have a start and end time:
+```glsl
+vec2 interval_start = probe_pos + dir * start_time;
+vec2 interval_end   = probe_pos + dir * end_time;
+vec3 radiance       = cast_interval(interval_start, interval_end);
+```
+
+It's important to note, the `cast_interval` function can use whatever <span class="highlight">ray casting method</span> you want.  
+As long as it returns the radiance information from the scene from the start to the end position.
 
 ---
 
 ## Merging
+
+We now should have our cascades stored in textures filled with radiance information. *Awesome!*  
+The next step is to actually <span class="highlight">extract the data</span> we want from this data structure *(the cascade hierarchy)*.
+
+We're going to extract specifically the <span class="highlight">diffuse irradiance</span> of the scene.  
+This basically means *adding together* the radiance coming in at a specific point from <span class="highlight">all directions</span>.  
+
+To do this efficiently, we traverse the cascades in a downwards fashion, starting at the highest cascade *(with the least probes)*.
 
 > Explain the idea of merging for low-frequency diffuse lighting.
 
@@ -225,9 +307,10 @@ Then we can use the following function to merge the averaged interval with the N
 
 ---
 
-## More Resources
+## Amazing Resources
 
-There's quite a few resources already out there related to RC, I will list a few down below:
+There's quite a few resources already out there related to RC. *(which helped me)*  
+I will list a few of them here, so you can get explanations from <span class="highlight">different perspectives</span>:
 - Alexander Sannikov's [paper](https://github.com/Raikiri/RadianceCascadesPaper) on Radiance Cascades.
 - Yaazarai's articles, [part 1](https://mini.gmshaders.com/p/radiance-cascades) & [part 2](https://mini.gmshaders.com/p/radiance-cascades2).
 - SimonDev's video [https://youtu.be/3so7xdZHKxw](https://youtu.be/3so7xdZHKxw).
