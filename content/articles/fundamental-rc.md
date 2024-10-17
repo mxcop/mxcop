@@ -66,11 +66,6 @@ Which states that the angle between our evenly spaced rays $ \Delta_\omega $ sho
 *Figure B*, shows that we can resolve a penumbra by <span class="highlight">interpolating</span> between only 2 probes. *(Shown as blue dots)*  
 The spacing of these probes can be increased the further away we get from all objects in the scene.
 
-{{ video_loop(file = "/anim/articles/fundamental-rc/penumbra-anim.mp4", alt = "Figure C: Moving the line occluder around.", width = "540px") }}
-
-*Figure C*, shows that regardless of the distance between the light and the occluder, the penumbra still <span class="highlight">grows with distance</span>.  
-However, the sharpness of the penumbra changes, RC is notoriously bad at representing *very* sharp shadows. 
-
 We can observe that the probe spacing is dependent on **two** factors:
 1. $ D $ The <span class="highlight">distance</span> to the closest object.
 2. $ w $ The <span class="highlight">size</span> of the smallest object.
@@ -78,6 +73,14 @@ We can observe that the probe spacing is dependent on **two** factors:
 > Does that not sound familiar?
 
 The <span class="highlight">distance</span> is the **inverse** of the angular observation!  
+
+{{ video_loop(file = "/anim/articles/fundamental-rc/penumbra-anim.mp4", alt = "Figure C: Moving the line occluder around.", width = "540px") }}
+
+*Figure C*, shows that regardless of the distance between the light and the occluder, the penumbra still <span class="highlight">grows with distance</span>.  
+However, the sharpness of the penumbra changes, RC is notoriously bad at representing *very* sharp shadows. 
+
+I want *Figure C* to <span class="highlight">clearify</span> that we're interested in the nearest or furthest object, **not light source**.  
+*At the end of the day, a wall is just a light source that emits no light, and a light source is just a wall that emits light.*
 
 ### Penumbra Condition / Theorem
 
@@ -101,7 +104,7 @@ Because we need higher resolution for both in order to resolve the smallest obje
 ### Recap
 
 Ok, these <span class="highlight">observations</span> took me some time to *wrap my head around* but they're key to understanding RC.  
-*So let's have a quick recap.*  
+*So let's quickly reiterate our observations.*  
 
 What we've <span class="highlight">observed</span> is that the **further** we are from the closest object in the scene:
 1. The **less** spatial resolution we need. *(e.g. the <span class="highlight">larger spacing</span> can be between probes)*
@@ -199,8 +202,8 @@ So if we increase probe spacing by **2x** we need to decrease the angle between 
 {{ video_loop(file = "/anim/articles/fundamental-rc/probe-memory-anim.mp4", alt = "Figure H: 4x4 probe in texture memory.", width = "360px") }}
 
 The most common way we <span class="highlight">store probes</span> in memory is using a **2D texture**.  
-In *Figure H*, we can see one such probe, it has *16* intervals making it *4x4* pixels in memory.  
-Each <span class="highlight">texel</span> representing a single <span class="highlight">direction</span>, shown with the white arrow in the center.
+In *Figure H*, we can see one such probe, it has *16* intervals making it *4x4* texels in memory.  
+Each <span class="highlight">texel</span> representing a single <span class="highlight">direction</span>, indicated by the white arrow in the center.
 
 ```glsl
 const int dir_count = 16; /* 4x4 */
@@ -211,7 +214,7 @@ float angle = TAU * ((float(dir_index) + 0.5) / float(dir_count));
 vec2 dir    = vec2(cos(angle), sin(angle));
 ```
 
-> The *code snippet* above shows how we can derive an interval direction from its index in the probe.
+> The *code snippet* above shows how we can derive an interval direction from its index within its probe.
 
 {{ image(
     src="/img/articles/understanding-rc/cascade-memory.png", alt="Figure I: Cascade in texture memory.",
@@ -328,3 +331,63 @@ $ f_r(x) = \sum_i{L(x,\vec{\omega_i}) * (\vec{n} \cdot \vec{\omega_i})} $
 Cook-Torrance Microfacet BRDF:
 
 $$ f_r(v,l) = \frac{\rho_d}{\pi} + \frac{F(v, h) * D(h) * G(l, v)}{4 * (n \cdot l) * (n \cdot v)} $$
+
+<math display="block" style="display:block math; font-size: 1.5em">
+  <mrow>
+    <msub>
+      <mi>f</mi>
+      <mi>r</mi>
+    </msub>
+    <mo form="prefix" stretchy="false">(</mo>
+    <mi>v</mi>
+    <mo separator="true">,</mo>
+    <mi>l</mi>
+    <mo form="postfix" stretchy="false">)</mo>
+    <mo>=</mo>
+    <mfrac>
+      <msub>
+        <mi>ρ</mi>
+        <mi>d</mi>
+      </msub>
+      <mi>π</mi>
+    </mfrac>
+    <mo>+</mo>
+    <mfrac>
+      <mrow>
+        <mi>F</mi>
+        <mo form="prefix" stretchy="false">(</mo>
+        <mi>v</mi>
+        <mo separator="true">,</mo>
+        <mi>h</mi>
+        <mo form="postfix" stretchy="false">)</mo>
+        <mo>*</mo>
+        <mi>D</mi>
+        <mo form="prefix" stretchy="false">(</mo>
+        <mi>h</mi>
+        <mo form="postfix" stretchy="false">)</mo>
+        <mo>*</mo>
+        <mi>G</mi>
+        <mo form="prefix" stretchy="false">(</mo>
+        <mi>l</mi>
+        <mo separator="true">,</mo>
+        <mi>v</mi>
+        <mo form="postfix" stretchy="false" lspace="0em" rspace="0em">)</mo>
+      </mrow>
+      <mrow>
+        <mn>4</mn>
+        <mo>*</mo>
+        <mo form="prefix" stretchy="false">(</mo>
+        <mi>n</mi>
+        <mo>⋅</mo>
+        <mi>l</mi>
+        <mo form="postfix" stretchy="false">)</mo>
+        <mo>*</mo>
+        <mo form="prefix" stretchy="false">(</mo>
+        <mi>n</mi>
+        <mo>⋅</mo>
+        <mi>v</mi>
+        <mo form="postfix" stretchy="false" lspace="0em" rspace="0em">)</mo>
+      </mrow>
+    </mfrac>
+  </mrow>
+</math>
