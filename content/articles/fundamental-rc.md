@@ -315,7 +315,7 @@ Then we can use the following function to merge the averaged interval with the N
 There's quite a few resources already out there related to RC. *(which helped me)*  
 I will list a few of them here, so you can get explanations from <span class="highlight">different perspectives</span>:
 - Alexander Sannikov's [paper](https://github.com/Raikiri/RadianceCascadesPaper) on Radiance Cascades.
-- Yaazarai's articles, [part 1](https://mini.gmshaders.com/p/radiance-cascades) & [part 2](https://mini.gmshaders.com/p/radiance-cascades2).
+- XorDev & Yaazarai's articles, [part 1](https://mini.gmshaders.com/p/radiance-cascades) & [part 2](https://mini.gmshaders.com/p/radiance-cascades2).
 - SimonDev's video [https://youtu.be/3so7xdZHKxw](https://youtu.be/3so7xdZHKxw).
 - Christopher M. J. Osborne's [paper](https://arxiv.org/abs/2408.14425) diving deeper into the bilinear fix.
 - Jason's blog post [https://jason.today/rc](https://jason.today/rc).
@@ -331,63 +331,3 @@ $ f_r(x) = \sum_i{L(x,\vec{\omega_i}) * (\vec{n} \cdot \vec{\omega_i})} $
 Cook-Torrance Microfacet BRDF:
 
 $$ f_r(v,l) = \frac{\rho_d}{\pi} + \frac{F(v, h) * D(h) * G(l, v)}{4 * (n \cdot l) * (n \cdot v)} $$
-
-<math display="block" style="display:block math; font-size: 1.5em">
-  <mrow>
-    <msub>
-      <mi>f</mi>
-      <mi>r</mi>
-    </msub>
-    <mo form="prefix" stretchy="false">(</mo>
-    <mi>v</mi>
-    <mo separator="true">,</mo>
-    <mi>l</mi>
-    <mo form="postfix" stretchy="false">)</mo>
-    <mo>=</mo>
-    <mfrac>
-      <msub>
-        <mi>ρ</mi>
-        <mi>d</mi>
-      </msub>
-      <mi>π</mi>
-    </mfrac>
-    <mo>+</mo>
-    <mfrac>
-      <mrow>
-        <mi>F</mi>
-        <mo form="prefix" stretchy="false">(</mo>
-        <mi>v</mi>
-        <mo separator="true">,</mo>
-        <mi>h</mi>
-        <mo form="postfix" stretchy="false">)</mo>
-        <mo>*</mo>
-        <mi>D</mi>
-        <mo form="prefix" stretchy="false">(</mo>
-        <mi>h</mi>
-        <mo form="postfix" stretchy="false">)</mo>
-        <mo>*</mo>
-        <mi>G</mi>
-        <mo form="prefix" stretchy="false">(</mo>
-        <mi>l</mi>
-        <mo separator="true">,</mo>
-        <mi>v</mi>
-        <mo form="postfix" stretchy="false" lspace="0em" rspace="0em">)</mo>
-      </mrow>
-      <mrow>
-        <mn>4</mn>
-        <mo>*</mo>
-        <mo form="prefix" stretchy="false">(</mo>
-        <mi>n</mi>
-        <mo>⋅</mo>
-        <mi>l</mi>
-        <mo form="postfix" stretchy="false">)</mo>
-        <mo>*</mo>
-        <mo form="prefix" stretchy="false">(</mo>
-        <mi>n</mi>
-        <mo>⋅</mo>
-        <mi>v</mi>
-        <mo form="postfix" stretchy="false" lspace="0em" rspace="0em">)</mo>
-      </mrow>
-    </mfrac>
-  </mrow>
-</math>
