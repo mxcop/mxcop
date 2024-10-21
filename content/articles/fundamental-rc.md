@@ -272,6 +272,25 @@ vec3 radiance       = cast_interval(interval_start, interval_end);
 It's important to note, the `cast_interval` function can use whatever <span class="highlight">ray casting method</span> you want.  
 As long as it returns the radiance information from the scene from the start to the end position.
 
+The <span class="highlight">start & end time</span> of our intervals depends on which cascade we're evaluating, and what branching is used.  
+For **4x** branching (the branching I recommend) we can use this code to find the start & end times:
+```glsl
+/* Get the scale factor for an interval in a given cascade */
+float interval_scale(int cascade_index) {
+    if (cascade_index <= 0) return 0.0;
+
+    /* Scale interval by 4x each cascade */
+    return float(1 << (2 * cascade_index));
+}
+
+/* Get the start & end time of an interval for a given cascade */
+vec2 interval_range(int cascade_index, float base_length) {
+    return base_length * vec2(interval_scale(i), interval_scale(i + 1));
+}
+```
+
+> The `base_length` above is the length you want intervals in cascade0 to have.
+
 ---
 
 ## Merging
