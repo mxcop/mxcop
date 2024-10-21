@@ -295,15 +295,59 @@ vec2 interval_range(int cascade_index, float base_length) {
 
 ## Merging
 
-We now should have our cascades stored in textures filled with radiance information. *Awesome!*  
-The next step is to actually <span class="highlight">extract the data</span> we want from this data structure *(the cascade hierarchy)*.
+Now we have our <span class="highlight">radiance field</span> stored as cascades in textures. *Awesome!*  
+The next step is to <span class="highlight">extract the data</span> we want from this data structure *(the cascade hierarchy)*.
 
-We're going to extract specifically the <span class="highlight">diffuse irradiance</span> of the scene.  
-This basically means *adding together* the radiance coming in at a specific point from <span class="highlight">all directions</span>.  
+We're going to extract specifically the <span class="highlight">diffuse irradiance</span> of the scene. *(also called fluence in 2D)*  
+This basically means *summing up* the radiance coming from <span class="highlight">all directions</span> for a specific point.  
 
-To do this efficiently, we traverse the cascades in a downwards fashion, starting at the highest cascade *(with the least probes)*.
+### Merging Intervals
 
-> Explain the idea of merging for low-frequency diffuse lighting.
+We've talked about basically splitting our rays into seperate intervals, probes => rings.  
+So how can we connect those seperate intervals back again, to make up a ray?
+
+{{ video_loop(file = "/anim/articles/fundamental-rc/interval-merge-anim.mp4", alt = "Figure J: Green interval should occlude red interval.", width = "360px") }}
+
+In *Figure J*, we can see that intervals earlier in the chain can <span class="highlight">occlude</span> intervals further down the chain.  
+To properly resolve this relation, we usually use a <span class="highlight">ray visibility term</span> which is stored in the alpha channel.  
+This term is set during the <span class="highlight">initial gathering</span>, it is `1.0` if the interval hit nothing, and `0.0` if it did.
+
+```glsl
+/* Merge 2 connected intervals with respect to their visibility term */
+vec4 merge_intervals(vec4 near, vec4 far) {
+    /* Far radiance can get occluded by near visibility term */
+    const vec3 radiance = near.rgb + (far.rgb * near.a);
+
+    return vec4(radiance, near.a * far.a);
+}
+```
+
+The *code snippet* above shows how we can implement interval merging in code.  
+As we can see, <span class="highlight">radiance</span> from the **far** interval can be occluded by the visibility term of the **near** interval.
+
+> We also merge the visibility terms, by multiplying them a hit will also be carried downwards. *(1.0 * 0.0 = 0.0)*
+
+### Merging Cones
+
+It would be <span class="highlight">really expensive</span> if we had to merge through each cascade for each possible direction.  
+So instead, let's merge each cascade into the one below it, from the <span class="highlight">top down</span>.
+
+{{ image(
+    src="/img/articles/understanding-rc/interval-cone.png", alt="Figure K: Cone made out of intervals.",
+    width="360px"
+) }}
+
+Because we're trying to extract <span class="highlight">diffuse lighting</span>, directional resolution isn't very important.  
+So it's completely fine to *squash* the entire scene radiance into **cascade0** *(which has the lowest angular resolution)*
+
+Because we have a <span class="highlight">branch factor</span>, e.g. **4x**, each cascade we will merge **4** intervals down into **1** interval.  
+Doing so for all cascades <span class="highlight">recursively</span> captures the radiance from a cone, as shown in *Figure K*.
+
+This is perfect for capturing our <span class="highlight">low angular resolution</span> diffuse lighting!
+
+### Merging Spatially
+
+> Explain how we merge bilinearly with the four nearest probes.
 
 ### Interval Merging
 
