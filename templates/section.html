@@ -15,7 +15,8 @@
 {% block content %}
 
 <div class="posts">
-    {% for page in section.pages | reverse %}
+    {% set section_filtered = section.pages | filter(attribute="extra.hidden", value=false) %}
+    {% for page in section_filtered | reverse %}
     <article class="post">
         <header>
             <h2>

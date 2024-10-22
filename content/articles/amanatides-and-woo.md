@@ -12,6 +12,9 @@ color = "emerald"
 [[extra.tags]]
 name = "voxel traversal"
 color = "amber"
+
+[extra]
+hidden = false
 +++
 
 ## Introduction

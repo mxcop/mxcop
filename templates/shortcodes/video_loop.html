@@ -1,11 +1,11 @@
 <div class="video">
     {% if width %}
-    <video style="width: {{width}}" class="video" autoplay loop>
+    <video style="width: {{width}}" class="video" preload="none" muted autoplay loop>
         <source src="{{ get_url(path = file) }}" type="video/mp4">
         Video tag is not supported.
     </video> 
     {% else %}
-    <video style="width: 360px" class="video" autoplay loop>
+    <video style="width: 360px" class="video" preload="none" muted autoplay loop>
         <source src="{{ get_url(path = file) }}" type="video/mp4">
         Video tag is not supported.
     </video> 
