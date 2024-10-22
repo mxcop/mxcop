@@ -20,11 +20,12 @@ splash = "img/articles/fundamental-rc/splash.png"
 ## Introduction
 
 In this article I'm going to share my understanding of the fudamentals of Radiance Cascades. *(abbreviated as RC)*  
-At it's core Radiance Cascades is a method for efficiently representing a <span class="highlight">radiance field</span>.  
-Essentially allowing us to represent the <span class="highlight">incoming light</span> from the scene at any point in the scene.
+At it's core, Radiance Cascades is a method for efficiently representing a <span class="highlight">radiance field</span>,  
+essentially allowing us to represent the <span class="highlight">incoming light</span> from/around some area at any point in that area.  
+In 2D that area is usually the screen.
 
-> For the sake of simplicity I will keep the explenations 2D, however RC can be expanded into the third dimension aswell.  
-> I will also assume the reader has a rudimentary understanding of ray tracing & the concept of radiance probes.
+> For the sake of simplicity I will explain everything in 2D, however RC can be expanded into 3D aswell.  
+> I will also assume the reader has a rudimentary understanding of ray tracing & the concept of irradiance probes.
 
 So, what can RC in 2D *(also referred to as Flatland)* achieve?  
 My implementation is able to compute <span class="highlight">diffuse global illumination</span> in real-time:
@@ -32,7 +33,7 @@ My implementation is able to compute <span class="highlight">diffuse global illu
 {{ video_loop(file = "/anim/articles/fundamental-rc/showcase.mp4", alt = "Diffuse global illumination in flatland.", width = "640px") }}
 
 An awesome property of this method is that this is done <span class="highlight">fully-deterministically</span> and without temporal re-use!  
-Furthermore there are already plenty of clever ways to get it's performance to acceptable levels for modern hardware.
+Furthermore, there are already plenty of clever ways to get it's performance to acceptable levels for modern hardware.
 
 *So without further ado, let's dive in!*
 
@@ -78,7 +79,7 @@ The <span class="highlight">distance</span> is the **inverse** of the angular ob
 *Figure C*, shows that regardless of the distance between the light and the occluder, the penumbra still <span class="highlight">grows with distance</span>.  
 However, the sharpness of the penumbra changes, RC is notoriously bad at representing *very* sharp shadows. 
 
-I want *Figure C* to <span class="highlight">clearify</span> that we're interested in the nearest or furthest object, **not light source**.  
+*Figure C*, also serves to <span class="highlight">highlight</span> that we're interested in the nearest or furthest object, **not light source**.  
 *At the end of the day, a wall is just a light source that emits no light, and a light source is just a wall that emits light.*
 
 ### Penumbra Condition / Theorem
@@ -123,8 +124,8 @@ In order to exploit the <span class="highlight">penumbra theorem</span> we need 
 {{ video_loop(file = "/anim/articles/fundamental-rc/splitting-anim.mp4", alt = "Figure D: Probe being split into &ldquo;rings&rdquo;.", width = "360px") }}
 
 *Figure D*, shows one way of narrowing this window, we can split our probes into rings.  
-By doing this we **not only** know that each ring will hit within a narrow distance window.  
-We can also <span class="highlight">vary</span> the <span class="highlight">angular resolution</span> between rings!
+By doing this we **not only** know that each ring will hit within a narrow distance window,  
+we can also <span class="highlight">vary</span> the <span class="highlight">angular resolution</span> between rings!
 
 > These new rays with a limited range, are referred to as **intervals**.
 
@@ -148,7 +149,7 @@ So far, with the angular observation we haven't really achieved any <span class=
 We're still casting a <span class="highlight">very large number</span> of rays for each probe using this method, *good thing that's about to change.*
 
 This is when we <span class="highlight">drop the idea</span> that these rings together make up a **single** probe.  
-Instead let's view each consecutive ring as its own probe, which *can be moved*.
+Instead, let's view each consecutive ring as its own probe, which *can be moved*.
 
 > From now on when we refer to **probes**, we are referring to **rings**.
 
@@ -206,10 +207,10 @@ Each <span class="highlight">texel</span> representing a single <span class="hig
 
 ```glsl
 const int dir_count = 16; /* 4x4 */
-const int dir_index = /* ... */;
+const int dir_index = ...;
 
 /* Compute interval direction from direction index */
-float angle = TAU * ((float(dir_index) + 0.5) / float(dir_count));
+float angle = 2.0 * PI * ((float(dir_index) + 0.5) / float(dir_count));
 vec2 dir    = vec2(cos(angle), sin(angle));
 ```
 
@@ -230,7 +231,7 @@ If we decrease the angle between intervals by **2x** each cascade, each subseque
 Because the probe count is decreasing by **2x** along 2 axes, making it decrease by **4x**, while the interval count only increases by **2x**.  
 > Meaning our total interval count will aproach **2x** the interval count of the first cascade as we add more cascades.
 
-If instead we decrease the angle between intervals by **4x** each cascade, each cascade will have <span class="highlight">equal the intervals</span>. 
+If instead, we decrease the angle between intervals by **4x** each cascade, each cascade will have <span class="highlight">equal the intervals</span>. 
 > Meaning our total interval count will grow linearly with cascade count.
 
 I <span class="highlight">recommend</span> using the **4x** branching method where interval count remains equal, it is <span class="highlight">simpler</span> to work with in practice.
@@ -257,7 +258,7 @@ Third, using that direction index we can obtain the direction vector: *(like I s
 const int dir_count = probe_size.x * probe_size.y;
 
 /* Compute interval direction from direction index */
-float angle = TAU * ((float(dir_index) + 0.5) / float(dir_count));
+float angle = 2.0 * PI * ((float(dir_index) + 0.5) / float(dir_count));
 vec2 dir    = vec2(cos(angle), sin(angle));
 ```
 
@@ -498,12 +499,12 @@ for (int d = 0; d < 4; d++) {
 
 ### Final Pass
 
-I did say *"that's all"*, I know, I know, but there's <span class="highlight">one more step</span>.  
-Which is to <span class="highlight">integrate</span> the radiance cones stored in merged **cascade0**. 
+I did say *"that's all"*, I know, I know, but there's <span class="highlight">one more step</span>,  
+which is to <span class="highlight">integrate</span> the irradiance stored in the now merged **cascade0**. 
 
 Luckily this is *relatively trivial*, we already have most of the code we need.  
 We simply <span class="highlight">bilinearly interpolate</span> between the **4** nearest **cascade0** probes for each pixel.  
-And then for each interval *(cone)* in those probes we sum up their radiance.
+And sum up the radiance from all intervals. *(cones)*
 
 {{ image(
     src="/img/articles/fundamental-rc/final-result.png", alt="Figure O: Final result! (Credit: Fad's Shadertoy)",
@@ -516,18 +517,19 @@ If we did everything correctly, we should end up with a <span class="highlight">
 
 For those who made it all the way till the end, <span class="highlight">thank you</span> for reading my article!  
 I hope it sheds some light on how & why <span class="highlight">Radiance Cascades</span> work.  
-It took me a while to properly understand it, and a lot of trail and error to get it working :)
+It took me a while to properly understand it, and a lot of trial & error to get it working :)
 
 ---
 
 ## Amazing Resources
 
-There's quite a few resources already out there related to RC. *(which helped me)*  
+There's quite a few resources already out there related to RC. *(which also helped me)*  
 I will list a few of them here, so you can get explanations from <span class="highlight">different perspectives</span>:
 - Alexander Sannikov's [paper](https://github.com/Raikiri/RadianceCascadesPaper) on Radiance Cascades.
 - XorDev & Yaazarai's articles, [part 1](https://mini.gmshaders.com/p/radiance-cascades) & [part 2](https://mini.gmshaders.com/p/radiance-cascades2).
 - SimonDev's video [https://youtu.be/3so7xdZHKxw](https://youtu.be/3so7xdZHKxw).
 - Christopher M. J. Osborne's [paper](https://arxiv.org/abs/2408.14425) diving deeper into the bilinear fix.
 - Jason's blog post [https://jason.today/rc](https://jason.today/rc).
+- Fad's [Shadertoy](https://www.shadertoy.com/view/mtlBzX) implementation.
 
 > Also check out our [Discord community](https://discord.gg/WQ4hCHhUuU) there's a lot of awesome people there that might be able to help you out!
