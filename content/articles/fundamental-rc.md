@@ -1,6 +1,6 @@
 +++
 title = "Fundamentals of Radiance Cascades"
-description = "For a few months now I've worked with Radiance Cascades, here's my understanding of the fundamentals provided by the paper."
+description = "I've worked with Radiance Cascades for some time now, this is my understanding of the fundamentals."
 authors = [ "Max &lt;mxcop&gt;" ]
 date = 2024-08-31
 
@@ -11,6 +11,10 @@ color = "emerald"
 [[extra.tags]]
 name = "radiance cascades"
 color = "lime"
+
+[extra]
+hidden = true
+splash = "img/articles/fundamental-rc/splash.png"
 +++
 
 ## Introduction
@@ -25,11 +29,6 @@ Essentially allowing us to represent the <span class="highlight">incoming light<
 So, what can RC in 2D *(also referred to as Flatland)* achieve?  
 My implementation is able to compute <span class="highlight">diffuse global illumination</span> in real-time:
 
-<!-- {{ image(
-    src="/img/articles/fundamental-rc/showcase.png", alt="Diffuse global illumination in flatland.",
-    width="640px"
-) }} -->
-
 {{ video_loop(file = "/anim/articles/fundamental-rc/showcase.mp4", alt = "Diffuse global illumination in flatland.", width = "640px") }}
 
 An awesome property of this method is that this is done <span class="highlight">fully-deterministically</span> and without temporal re-use!  
@@ -42,7 +41,7 @@ Furthermore there are already plenty of clever ways to get it's performance to a
 ## Observations
 
 Radiance Cascades is build on **two** key observations.  
-So first, let's observe these together, and have a <span class="highlight">quick recap</span> afterwards.
+So first, let's observe these together, and have a <span class="highlight">short recap</span> afterwards.
 
 ### Angular Observation
 
@@ -133,7 +132,7 @@ This is exactly what we're looking for to <span class="highlight">exploit</span>
 We can increase the interval count *(aka, decrease the angle between rays)* with each consecutive ring that hits objects further away.
 
 {{ image(
-    src="/img/articles/understanding-rc/inc-angular-split.png", alt="Figure E: Increasing angular resolution for more distant &ldquo;rings&rdquo;.",
+    src="/img/articles/fundamental-rc/inc-angular-split.png", alt="Figure E: Increasing angular resolution for more distant &ldquo;rings&rdquo;.",
     width="360px"
 ) }}
 
@@ -154,7 +153,7 @@ Instead let's view each consecutive ring as its own probe, which *can be moved*.
 > From now on when we refer to **probes**, we are referring to **rings**.
 
 {{ image(
-    src="/img/articles/understanding-rc/cascade-crown.png", alt="Figure F: 4 blue probes for 1 green probe.",
+    src="/img/articles/fundamental-rc/cascade-crown.png", alt="Figure F: 4 blue probes for 1 green probe.",
     width="360px"
 ) }}
 
@@ -171,8 +170,8 @@ Now that we understand how we can exploit the **two** key observations.
 Let's put the **two** together and finally define what exactly a <span class="highlight">cascade</span> is!
 
 {{ image_2x1(
-    src1="/img/articles/understanding-rc/cascade0.png", alt1="Figure G1: Cascade 0, with 4x4 probes.",
-    src2="/img/articles/understanding-rc/cascade1.png", alt2="Figure G2: Cascade 1, with 2x2 probes.",
+    src1="/img/articles/fundamental-rc/cascade0.png", alt1="Figure G1: Cascade 0, with 4x4 probes.",
+    src2="/img/articles/fundamental-rc/cascade1.png", alt2="Figure G2: Cascade 1, with 2x2 probes.",
     width1="360px", width2="360px"
 ) }}
 
@@ -217,7 +216,7 @@ vec2 dir    = vec2(cos(angle), sin(angle));
 > The *code snippet* above shows how we can derive an interval direction from its index within its probe.
 
 {{ image(
-    src="/img/articles/understanding-rc/cascade-memory.png", alt="Figure I: Cascade in texture memory.",
+    src="/img/articles/fundamental-rc/cascade-memory.png", alt="Figure I: Cascade in texture memory.",
     width="360px"
 ) }}
 
@@ -333,7 +332,7 @@ It would be <span class="highlight">really expensive</span> if we had to merge t
 So instead, let's merge each cascade into the one below it, from the <span class="highlight">top down</span>.
 
 {{ image(
-    src="/img/articles/understanding-rc/interval-cone.png", alt="Figure K: Cone made out of intervals.",
+    src="/img/articles/fundamental-rc/interval-cone.png", alt="Figure K: Cone made out of intervals.",
     width="360px"
 ) }}
 
@@ -347,29 +346,177 @@ This is perfect for capturing our <span class="highlight">low angular resolution
 
 ### Merging Spatially
 
-> Explain how we merge bilinearly with the four nearest probes.
+Not only our angular resolution changes between cascades, we also know our spatial resolution changes.  
+If we always merge with the <span class="highlight">nearest</span> probe from the next cascade, we will get an obvious <span class="highlight">grid pattern</span>.
 
-### Interval Merging
+> The "next cascade" is the cascade above the current one, it has lower spatial & higher angular resolution.
 
-To resolve the <span class="highlight">diffuse radiance</span> in the scene, we can recursively merge intervals to capture the radiance from a <span class="highlight">cone</span>.  
-The question is: *"How do we merge intervals, and how do we merge them between cascades?"*
+{{ image(
+    src="/img/articles/fundamental-rc/nearest-interp.png", alt="Figure L: Merging with nearest probe only.",
+    width="360px"
+) }}
 
-> [Figure G: graphic showing intervals making up a cone]
+In *Figure L*, we can clearly see this obvious grid pattern, which actually <span class="highlight">visualizes</span> the probes themselves.  
+It is a cool effect, but not exactly the smooth penumbrae we're looking for.
 
-*Figure G, shows a <span class="highlight">cone</span> made out of intervals from different <span class="highlight">cascades</span>.  
-In this case, the number of <span class="highlight">intervals</span> grows by **x4** with each subsequent cascade.  
-Which also means we will <span class="highlight">merge 4</span> intervals from cascade N+1 <span class="highlight">into 1</span> interval of cascade N.
+{{ image(
+    src="/img/articles/fundamental-rc/bilinear-probes.png", alt="Figure M: Merging with 4 bilinear probes.",
+    width="360px"
+) }}
 
-The way we do this is by first <span class="highlight">averaging</span> the 4, N+1 intervals together.  
-Then we can use the following function to merge the averaged interval with the N interval.
+> Weights shown in *Figure M* are incorrect! They should always add up to `1.0`.
 
-> Show code for the merge process.
+Let's instead use <span class="highlight">bilinear interpolation</span> to merge with the nearest **4** probes from the next cascade.  
+We can see what this looks like in *Figure M*, <span class="highlight">bilinear probes</span> closer to the destination probe get higher weights.
 
----
+> I tend to refer to the **green** probes as "bilinear probes" & the **blue** probe as "destination probe".
 
-## Results
+{{ image(
+    src="/img/articles/fundamental-rc/bilinear-interp.png", alt="Figure N: Smooth penumbrae using bilinear interpolation.",
+    width="360px"
+) }}
 
-> Show results.
+In *Figure N*, we can see the effect of <span class="highlight">spatially interpolating</span> the probes using bilinear interpolation.  
+The result is nice <span class="highlight">smooth penumbrae</span>, instead of the blocky ones we got with nearest interpolation.
+
+### Merging Algorithm
+
+Let's put our <span class="highlight">angular & spatial</span> merging together to finally obtain our diffuse lighting.
+
+> Remember, we merge top down, starting with the lowest spatial resolution going down to the highest spatial resolution.
+
+Starting from the top, the <span class="highlight">first cascade</span> doesn't have a cascade to merge with.  
+We can either skip it, or we can merge with a <span class="highlight">skybox</span> for example.
+
+For every other cascade we will <span class="highlight">merge</span> with the one above it, we can write this as: $ N_{i+1} \to N_{i} $  
+From now on I'll be referring to them as **N+1** and **N** for simplicity.
+
+The first step is finding our **4** <span class="highlight">bilinear probes</span> from **N+1**, and their respective weights.  
+To find the **4** bilinear probes we get the *top-left* bilinear probe index, and then simply iterate over a **2x2** from that `base_index`.  
+And we'll use the fractional part of that `base_index` to derive our <span class="highlight">bilinear weights</span>:
+```glsl
+/* Sub-texel offset to bilinear interpolation weights */
+vec4 bilinear_weights(vec2 ratio) {
+    return vec4(
+        (1.0 - ratio.x) * (1.0 - ratio.y),
+        ratio.x * (1.0 - ratio.y),
+        (1.0 - ratio.x) * ratio.y,
+        ratio.x * ratio.y
+    );
+}
+
+void bilinear_samples(vec2 dest_center, vec2 bilinear_size, out vec4 weights, out ivec2 base_index) {
+    /* Coordinate of the top-left bilinear probe when floored */
+    const vec2 base_coord = (dest_center / bilinear_size) - vec2(0.5, 0.5);
+
+    const vec2 ratio = fract(base_coord);  /* Sub-bilinear probe position */
+    weights = bilinear_weights(ratio);
+    base_index = ivec2(floor(base_coord)); /* Top-left bilinear probe coordinate */
+}
+```
+
+As inputs our `bilinear_samples` takes the following parameters:
+```glsl
+vec2 dest_center = ...; /* Center position of destination probe in pixels */
+vec2 bilinear_size = ...; /* Size of bilinear probe in pixels */
+```
+
+Now we will have 2 <span class="highlight">nested loops</span>:  
+For each of the **4** bilinear probes, we will merge with **4** of their intervals.
+```glsl
+/* For each extra N+1 interval */
+for (int d = 0; d < 4; d++) {
+    /* For each N+1 bilinear probe */
+    for (int b = 0; b < 4; b++) {
+        const ivec2 base_offset = bilinear_offset(b);
+
+        /* ... */
+    }
+}
+```
+
+You may have noticed the `bilinear_offset` function in the <span class="highlight">inner loop</span>.  
+It simply converts our **1D** index into a coordinate in the **2x2** bilinear square:
+```glsl
+/* Convert index 0..4 to a 2d index in a 2x2 square */
+ivec2 bilinear_offset(int offset_index) {
+    const ivec2 offsets[4] = { ivec2(0, 0), ivec2(1, 0), ivec2(0, 1), ivec2(1, 1) };
+    return offsets[offset_index];
+}
+```
+
+We can add our `base_offset` to the `base_index` we got <span class="highlight">earlier</span> to get the **2D** index of the bilinear probe.
+```glsl
+/* Get the index of the bilinear probe to merge with */
+const ivec2 bilinear_index = base_index + base_offset;
+```
+
+Now it is relatively trivial to use our `dir_index` we learned how to get earlier.  
+To get a directional `base_index` and add `d` to it.  
+```glsl
+/* Get the directional base index */
+const int base_dir_index = dir_index * 4;
+
+/* Get the directional index we want to merge with */
+const int bilinear_dir_index = base_dir_index + d;
+```
+
+Then finally we can combine the `bilinear_dir_index` & `bilinear_index` to get the <span class="highlight">texel</span> coordinate in cascade **N+1** to merge with.
+```glsl
+/* Convert the directional index to a local texel coordinate */
+const ivec2 bilinear_dir_coord = ivec2(
+    bilinear_dir_index % bilinear_size.x,
+    bilinear_dir_index / bilinear_size.y
+);
+
+/* Get the texel coordinate to merge with in cascade N+1 */
+const ivec2 bilinear_texel = bilinear_index * bilinear_size + bilinear_dir_coord;
+```
+
+Merging we do using the `merge_intervals` function from <span class="highlight">ealier</span> in the article.
+```glsl
+/* For each extra N+1 interval */
+vec4 merged = vec4(0.0);
+for (int d = 0; d < 4; d++) {
+    /* For each N+1 bilinear probe */
+    vec4 radiance = vec4(0.0);
+    for (int b = 0; b < 4; b++) {
+        /* ... */
+
+        /* Fetch the bilinear interval from the cascade N+1 texture */
+        const vec4 bilinear_interval = textureFetch(bilinear_texel);
+
+        /* Merge our destination interval with the bilinear interval */
+        radiance += merge_intervals(destination_interval, bilinear_interval) * weights[b];
+    }
+
+    merged += radiance / 4.0;
+}
+```
+
+<span class="highlight">That's all</span>! We've now merged all the cascades down into **cascade0**.
+
+### Final Pass
+
+I did say *"that's all"*, I know, I know, but there's <span class="highlight">one more step</span>.  
+Which is to <span class="highlight">integrate</span> the radiance cones stored in merged **cascade0**. 
+
+Luckily this is *relatively trivial*, we already have most of the code we need.  
+We simply <span class="highlight">bilinearly interpolate</span> between the **4** nearest **cascade0** probes for each pixel.  
+And then for each interval *(cone)* in those probes we sum up their radiance.
+
+{{ image(
+    src="/img/articles/fundamental-rc/final-result.png", alt="Figure O: Final result! (Credit: Fad's Shadertoy)",
+    width="540px"
+) }}
+
+> Image credit: [Fad's Shadertoy](https://www.shadertoy.com/view/mtlBzX).
+
+If we did everything correctly, we should end up with a <span class="highlight">beautiful</span> result like in *Figure O*.
+
+For those who made it all the way till the end, <span class="highlight">thank you</span> for reading my article!  
+I hope it sheds some light on how & why <span class="highlight">Radiance Cascades</span> work.  
+It took me a while to properly understand it, and a lot of trail and error to get it working :)
 
 ---
 
@@ -383,14 +530,4 @@ I will list a few of them here, so you can get explanations from <span class="hi
 - Christopher M. J. Osborne's [paper](https://arxiv.org/abs/2408.14425) diving deeper into the bilinear fix.
 - Jason's blog post [https://jason.today/rc](https://jason.today/rc).
 
-## Equations
-
-Final pass:
-
-$ f_r(x) = \int_\Omega{L(x,\omega) * \cos(\theta_x) * d\omega} $
-
-$ f_r(x) = \sum_i{L(x,\vec{\omega_i}) * (\vec{n} \cdot \vec{\omega_i})} $
-
-Cook-Torrance Microfacet BRDF:
-
-$$ f_r(v,l) = \frac{\rho_d}{\pi} + \frac{F(v, h) * D(h) * G(l, v)}{4 * (n \cdot l) * (n \cdot v)} $$
+> Also check out our [Discord community](https://discord.gg/WQ4hCHhUuU) there's a lot of awesome people there that might be able to help you out!

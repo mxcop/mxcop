@@ -22,6 +22,27 @@
 
 {% endblock head %}
 
+<!-- Splash image -->
+{% block splash %}
+
+{% set splash_url = page.extra | get(key="splash", default="") %}
+{% if splash_url %}
+
+<!-- Google / Search Engine Tags -->
+<meta itemprop="image" content="{{ get_url(path=splash_url, trailing_slash=false) }}">
+
+<!-- Facebook Meta Tags -->
+<meta property="og:url" content="https://m4xc.dev/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="{{ get_url(path=splash_url, trailing_slash=false) }}">
+
+<!-- Twitter Meta Tags -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ get_url(path=splash_url, trailing_slash=false) }}"> 
+{% endif %}
+
+{% endblock splash %}
+
 <!-- Content -->
 {% block content %}
 <div class="post">

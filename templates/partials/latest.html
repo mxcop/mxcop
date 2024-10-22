@@ -2,7 +2,8 @@
     <!-- Latest blog post -->
     {% if false %}
     {% set blog_section = get_section(path="blog/_index.md") %}
-    {% set blog_post = blog_section.pages | first %}
+    {% set blog_filtered = blog_section.pages | filter(attribute="extra.hidden", value=false) %}
+    {% set blog_post = blog_filtered | first %}
     <h2 class="title-soft">Latest blog post</h2>
     <article class="post">
         <header>
@@ -30,7 +31,9 @@
 
     <!-- Latest article post -->
     {% set article_section = get_section(path="articles/_index.md") %}
-    {% set article_post = article_section.pages | first %}
+    {% set article_filtered = article_section.pages | filter(attribute="extra.hidden", value=false) %}
+    {% set article_post = article_filtered | first %}
+    {% if article_post %}
     <h2 class="title-soft">Latest article</h2>
     <article class="post">
         <header>
@@ -54,4 +57,5 @@
 
         <a class="post-link" href="{{ article_post.permalink }}"></a>
     </article>
+    {% endif %}
 </div>

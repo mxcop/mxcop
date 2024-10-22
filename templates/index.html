@@ -14,6 +14,20 @@
     <meta name="copyright" content="{{ config.extra.copyright }}"/>
     <meta name="description" content="{% block description %}MΛX's personal website.{% endblock description %}">
 
+    {% block splash %}
+    <!-- Google / Search Engine Tags -->
+    <meta itemprop="image" content="{{ get_url(path="img/splash.png", trailing_slash=false) }}">
+
+    <!-- Facebook Meta Tags -->
+    <meta property="og:url" content="https://m4xc.dev/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ get_url(path="img/splash.png", trailing_slash=false) }}">
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ get_url(path="img/splash.png", trailing_slash=false) }}"> 
+    {% endblock splash %}
+    
     <!-- CSS -->
     <link rel="stylesheet" href="{{ get_url(path="general.css", trailing_slash=false) }}">
 
