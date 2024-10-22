@@ -1,8 +1,8 @@
 +++
 title = "Fundamentals of Radiance Cascades"
-description = "I've worked with Radiance Cascades for some time now, this is my understanding of the fundamentals."
+description = "I've worked with Radiance Cascades for some time now, this is a deep-dive into the fundamentals."
 authors = [ "Max &lt;mxcop&gt;" ]
-date = 2024-08-31
+date = 2024-10-22
 
 [[extra.tags]]
 name = "graphics"
@@ -21,7 +21,7 @@ splash = "img/articles/fundamental-rc/splash.png"
 
 In this article I'm going to share my understanding of the fudamentals of Radiance Cascades. *(abbreviated as RC)*  
 At it's core, Radiance Cascades is a method for efficiently representing a <span class="highlight">radiance field</span>,  
-essentially allowing us to represent the <span class="highlight">incoming light</span> from/around some area at any point in that area.  
+allowing us to represent the <span class="highlight">incoming light</span> from/around some area at any point in that area.  
 In 2D that area is usually the screen.
 
 > For the sake of simplicity I will explain everything in 2D, however RC can be expanded into 3D aswell.  
@@ -33,7 +33,7 @@ My implementation is able to compute <span class="highlight">diffuse global illu
 {{ video_loop(file = "/anim/articles/fundamental-rc/showcase.mp4", alt = "Diffuse global illumination in flatland.", width = "640px") }}
 
 An awesome property of this method is that this is done <span class="highlight">fully-deterministically</span> and without temporal re-use!  
-Furthermore, there are already plenty of clever ways to get it's performance to acceptable levels for modern hardware.
+Furthermore, there are already plenty of clever ways to get its performance to acceptable levels for modern hardware.
 
 *So without further ado, let's dive in!*
 
@@ -50,7 +50,7 @@ So first, let's observe these together, and have a <span class="highlight">short
 
 *Figure A*, depicts a <span class="highlight">circular object</span> on the left, with a radiance probe to the right of it.  
 The radiance probe has an angular resolution which can be defined as the angle between its evenly spaced rays. *(Shown in blue)*  
-As the radiance probe moves <span class="highlight">further away</span> from the light source, we can see that it's <span class="highlight">angular resolution</span> becomes insufficient.
+As the radiance probe moves <span class="highlight">further away</span> from the light source, we can see that its <span class="highlight">angular resolution</span> becomes insufficient.
 
 What we can observe here is that the angle between rays we can get away with for a probe, depends on **two** factors:
 1. $ D $ The <span class="highlight">distance</span> to the furthest object.
@@ -118,12 +118,12 @@ Now that we've made the observations and defined the penumbra theorem, let's loo
 
 ### Angular
 
-We've got a **problem**: normal probes we're all used to, can hit objects at <span class="highlight">virtually any distance</span>.  
+We've got a **problem**: classic probes we're all used to, can hit objects at <span class="highlight">virtually any distance</span>.  
 In order to exploit the <span class="highlight">penumbra theorem</span> we need some way to *narrow* this possible <span class="highlight">distance window</span>.
 
 {{ video_loop(file = "/anim/articles/fundamental-rc/splitting-anim.mp4", alt = "Figure D: Probe being split into &ldquo;rings&rdquo;.", width = "360px") }}
 
-*Figure D*, shows one way of narrowing this window, we can split our probes into rings.  
+*Figure D*, shows one way of narrowing this window, we can discretize our circular probes into rings.  
 By doing this we **not only** know that each ring will hit within a narrow distance window,  
 we can also <span class="highlight">vary</span> the <span class="highlight">angular resolution</span> between rings!
 
@@ -162,6 +162,10 @@ Instead, let's view each consecutive ring as its own probe, which *can be moved*
 We saw during the spatial observation that when objects are <span class="highlight">further away</span>, we can have <span class="highlight">larger spacing</span> between probes.
 
 So, when our <span class="highlight">distance window</span> gets further and further away, we may increase the <span class="highlight">spacing</span> between those probes.
+
+There is a visible <span class="highlight">disconnect</span> between probes between cascades, this *does* result in artifacts, mainly *ringing*.  
+The <span class="highlight">disconnect</span> in *Figure F* is over exaggerated compared to a real implementation.  
+> There are fixes out there *(e.g. bilinear & parallax fix)*, however they're out of the scope of this article.
 
 ---
 
