@@ -1,8 +1,8 @@
 +++
 title = "Fundamentals of Radiance Cascades"
-description = "I've worked with Radiance Cascades for some time now, this is my understanding of the fundamentals."
+description = "A deep-dive into the fundamental concepts/ideas behind Radiance Cascades."
 authors = [ "Max &lt;mxcop&gt;" ]
-date = 2024-08-31
+date = 2024-10-22
 
 [[extra.tags]]
 name = "graphics"
@@ -13,7 +13,7 @@ name = "radiance cascades"
 color = "lime"
 
 [extra]
-hidden = true
+hidden = false
 splash = "img/articles/fundamental-rc/splash.png"
 +++
 
@@ -21,7 +21,7 @@ splash = "img/articles/fundamental-rc/splash.png"
 
 In this article I'm going to share my understanding of the fudamentals of Radiance Cascades. *(abbreviated as RC)*  
 At it's core, Radiance Cascades is a method for efficiently representing a <span class="highlight">radiance field</span>,  
-essentially allowing us to represent the <span class="highlight">incoming light</span> from/around some area at any point in that area.  
+allowing us to represent the <span class="highlight">incoming light</span> from/around some area at any point in that area.  
 In 2D that area is usually the screen.
 
 > For the sake of simplicity I will explain everything in 2D, however RC can be expanded into 3D aswell.  
@@ -33,7 +33,7 @@ My implementation is able to compute <span class="highlight">diffuse global illu
 {{ video_loop(file = "/anim/articles/fundamental-rc/showcase.mp4", alt = "Diffuse global illumination in flatland.", width = "640px") }}
 
 An awesome property of this method is that this is done <span class="highlight">fully-deterministically</span> and without temporal re-use!  
-Furthermore, there are already plenty of clever ways to get it's performance to acceptable levels for modern hardware.
+Furthermore, there are already plenty of clever ways to get its performance to acceptable levels for modern hardware.
 
 *So without further ado, let's dive in!*
 
@@ -50,7 +50,7 @@ So first, let's observe these together, and have a <span class="highlight">short
 
 *Figure A*, depicts a <span class="highlight">circular object</span> on the left, with a radiance probe to the right of it.  
 The radiance probe has an angular resolution which can be defined as the angle between its evenly spaced rays. *(Shown in blue)*  
-As the radiance probe moves <span class="highlight">further away</span> from the light source, we can see that it's <span class="highlight">angular resolution</span> becomes insufficient.
+As the radiance probe moves <span class="highlight">further away</span> from the light source, we can see that its <span class="highlight">angular resolution</span> becomes insufficient.
 
 What we can observe here is that the angle between rays we can get away with for a probe, depends on **two** factors:
 1. $ D $ The <span class="highlight">distance</span> to the furthest object.
@@ -97,7 +97,7 @@ $
 $
 > $ A <\sim B $ means that; $ A $ is less than the output of some function, which scales linearly with $ B $.
 
-$ w $ is not included in the <span class="highlight">penumbra condition</span> because it is the same at all points in the scene.  
+$ w $ *(the size of the smallest object)* is not included in the <span class="highlight">penumbra condition</span> because it is the same at all points in the scene.  
 We can also observe that the required angular & spatial resolution both increase when $ w $ decreases.  
 Because we need higher resolution for both in order to resolve the smallest object in the scene.
 
@@ -118,12 +118,12 @@ Now that we've made the observations and defined the penumbra theorem, let's loo
 
 ### Angular
 
-We've got a **problem**: normal probes we're all used to, can hit objects at <span class="highlight">virtually any distance</span>.  
+We've got a **problem**: classic probes we're all used to, can hit objects at <span class="highlight">virtually any distance</span>.  
 In order to exploit the <span class="highlight">penumbra theorem</span> we need some way to *narrow* this possible <span class="highlight">distance window</span>.
 
 {{ video_loop(file = "/anim/articles/fundamental-rc/splitting-anim.mp4", alt = "Figure D: Probe being split into &ldquo;rings&rdquo;.", width = "360px") }}
 
-*Figure D*, shows one way of narrowing this window, we can split our probes into rings.  
+*Figure D*, shows one way of narrowing this window, we can discretize our circular probes into rings.  
 By doing this we **not only** know that each ring will hit within a narrow distance window,  
 we can also <span class="highlight">vary</span> the <span class="highlight">angular resolution</span> between rings!
 
@@ -153,15 +153,18 @@ Instead, let's view each consecutive ring as its own probe, which *can be moved*
 
 > From now on when we refer to **probes**, we are referring to **rings**.
 
-{{ image(
-    src="/img/articles/fundamental-rc/cascade-crown.png", alt="Figure F: 4 blue probes for 1 green probe.",
-    width="360px"
-) }}
+{{ video_loop(file = "/anim/articles/fundamental-rc/spatial-exploit-anim.mp4", alt = "Figure F: Increasing probe/ring spacing.", width = "360px") }}
+
+> The length of the intervals in *Figure F* is **incorrect**, this is to make them easier on the eyes.
 
 *Figure F*, shows one way we can use this new <span class="highlight">perspective</span> on the probes.  
 We saw during the spatial observation that when objects are <span class="highlight">further away</span>, we can have <span class="highlight">larger spacing</span> between probes.
 
-So, when our <span class="highlight">distance window</span> gets further and further away, we may increase the <span class="highlight">spacing</span> between those probes.
+So, when our <span class="highlight">distance window</span> gets further and further away, we may increase the <span class="highlight">spacing</span> between those probes.  
+And because we're trying to fill some <span class="highlight">area</span> with them, this means we need less of them.
+
+There is a visible <span class="highlight">disconnect</span> between probes between cascades, this *does* result in artifacts, mainly *ringing*.
+> There are fixes out there *(e.g. bilinear & parallax fix)*, however they're out of the scope of this article.
 
 ---
 
@@ -223,6 +226,9 @@ vec2 dir    = vec2(cos(angle), sin(angle));
 
 Now, of course we're not going to store <span class="highlight">each probe</span> in its own texture.  
 Instead, let's store <span class="highlight">each cascade</span> in a texture, packing the probes together as shown in *Figure I*.
+
+> There's also an alternative superior data layout, called **direction first**.  
+> Where you store all intervals with the same direction together in blocks, which improves data locality during merging.
 
 This is where we see why decreasing the probe count by **2x** on <span class="highlight">each axis</span> is nice.  
 It works out *really well* when using this kind of packing.
@@ -370,6 +376,8 @@ It is a cool effect, but not exactly the smooth penumbrae we're looking for.
 Let's instead use <span class="highlight">bilinear interpolation</span> to merge with the nearest **4** probes from the next cascade.  
 We can see what this looks like in *Figure M*, <span class="highlight">bilinear probes</span> closer to the destination probe get higher weights.
 
+I like to think of it as <span class="highlight">blurring</span> those blocky probes in *Figure L* with their neighbours.
+
 > I tend to refer to the **green** probes as "bilinear probes" & the **blue** probe as "destination probe".
 
 {{ image(
@@ -435,6 +443,17 @@ for (int d = 0; d < 4; d++) {
     }
 }
 ```
+
+{{ image(
+    src="/img/articles/fundamental-rc/full-merge.png", alt="Figure O: Merging for 1 interval (in blue).",
+    width="360px"
+) }}
+
+Looking at *Figure O*, we get a visual of what those <span class="highlight">nested loops</span> are for.  
+Looping over the **4** nearest probes from **N+1** and *(in this graphic 2)* intervals.  
+*Figure O* is drawn with a <span class="highlight">branch factor</span> of **2x** instead of our **4x** otherwise it can get quite busy with all the intervals.
+
+> The **green** intervals in *Figure O* are colored based on their bilinear **weights**, brighter means a higher weight.
 
 You may have noticed the `bilinear_offset` function in the <span class="highlight">inner loop</span>.  
 It simply converts our **1D** index into a coordinate in the **2x2** bilinear square:
@@ -507,13 +526,13 @@ We simply <span class="highlight">bilinearly interpolate</span> between the **4*
 And sum up the radiance from all intervals. *(cones)*
 
 {{ image(
-    src="/img/articles/fundamental-rc/final-result.png", alt="Figure O: Final result! (Credit: Fad's Shadertoy)",
+    src="/img/articles/fundamental-rc/final-result.png", alt="Figure P: Final result! (Credit: Fad's Shadertoy)",
     width="540px"
 ) }}
 
 > Image credit: [Fad's Shadertoy](https://www.shadertoy.com/view/mtlBzX).
 
-If we did everything correctly, we should end up with a <span class="highlight">beautiful</span> result like in *Figure O*.
+If we did everything correctly, we should end up with a <span class="highlight">beautiful</span> result like in *Figure P*.
 
 For those who made it all the way till the end, <span class="highlight">thank you</span> for reading my article!  
 I hope it sheds some light on how & why <span class="highlight">Radiance Cascades</span> work.  
