@@ -1,6 +1,6 @@
 +++
 title = "Fundamentals of Radiance Cascades"
-description = "I've worked with Radiance Cascades for some time now, this is a deep-dive into the fundamentals."
+description = "A deep-dive into the fundamental concepts/ideas behind Radiance Cascades."
 authors = [ "Max &lt;mxcop&gt;" ]
 date = 2024-10-22
 
@@ -13,7 +13,7 @@ name = "radiance cascades"
 color = "lime"
 
 [extra]
-hidden = true
+hidden = false
 splash = "img/articles/fundamental-rc/splash.png"
 +++
 
