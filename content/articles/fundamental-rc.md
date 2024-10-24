@@ -291,7 +291,7 @@ float interval_scale(int cascade_index) {
 
 /* Get the start & end time of an interval for a given cascade */
 vec2 interval_range(int cascade_index, float base_length) {
-    return base_length * vec2(interval_scale(i), interval_scale(i + 1));
+    return base_length * vec2(interval_scale(cascade_index), interval_scale(cascade_index + 1));
 }
 ```
 
