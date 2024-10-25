@@ -41,7 +41,7 @@ Furthermore, there are already plenty of clever ways to get its performance to a
 
 ## Observations
 
-Radiance Cascades is build on **two** key observations.  
+Radiance Cascades is built on **two** key observations.  
 So first, let's observe these together, and have a <span class="highlight">short recap</span> afterwards.
 
 ### Angular Observation
@@ -291,7 +291,7 @@ float interval_scale(int cascade_index) {
 
 /* Get the start & end time of an interval for a given cascade */
 vec2 interval_range(int cascade_index, float base_length) {
-    return base_length * vec2(interval_scale(i), interval_scale(i + 1));
+    return base_length * vec2(interval_scale(cascade_index), interval_scale(cascade_index + 1));
 }
 ```
 
@@ -493,7 +493,7 @@ const ivec2 bilinear_dir_coord = ivec2(
 const ivec2 bilinear_texel = bilinear_index * bilinear_size + bilinear_dir_coord;
 ```
 
-Merging we do using the `merge_intervals` function from <span class="highlight">ealier</span> in the article.
+Merging we do using the `merge_intervals` function from <span class="highlight">earlier</span> in the article.
 ```glsl
 /* For each extra N+1 interval */
 vec4 merged = vec4(0.0);

@@ -2,7 +2,7 @@
     {% if width1 %} {% if width2 %}
     
     <div class="video">
-        <video style="width: {{width1}}" class="video" preload="none" muted autoplay playsinline loop>
+        <video style="width: {{width1}}" class="video" muted autoplay playsinline loop>
             <source src="{{ get_url(path = src1) }}" type="video/mp4">
             Video tag is not supported.
         </video>
@@ -17,7 +17,7 @@
     {% else %}
     
     <div class="video">
-        <video style="width: {{width1}}" class="video" preload="none" muted autoplay playsinline loop>
+        <video style="width: {{width1}}" class="video" muted autoplay playsinline loop>
             <source src="{{ get_url(path = src1) }}" type="video/mp4">
             Video tag is not supported.
         </video>
@@ -34,7 +34,7 @@
     {% else %}
     
     <div class="video">
-        <video style="width: 360px" class="video" preload="none" muted autoplay playsinline loop>
+        <video style="width: 360px" class="video" muted autoplay playsinline loop>
             <source src="{{ get_url(path = src1) }}" type="video/mp4">
             Video tag is not supported.
         </video>
