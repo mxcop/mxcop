@@ -22,7 +22,7 @@ splash = "img/articles/fundamental-rc/splash.png"
 In this article I'm going to share my understanding of the fudamentals of Radiance Cascades. *(abbreviated as RC)*  
 Over the past months I've build some <span class="highlight">intuitions</span> & understanding of RC, and my goal is to share some of that here with you.  
 
-This article might be difficult to follow for those who haven't had any <span class="highlight">prior experience</span> with ray tracing & global illumination.  
+This article will likely be easier to follow for those with <span class="highlight">prior experience</span> with ray tracing & global illumination.  
 Nevertheless, I'll do my best to explains everything in an intuitive way using <span class="highlight">graphics</span>!  
 
 At it's core, Radiance Cascades is a method for efficiently representing a <span class="highlight">radiance field</span> *(light field)*.  
