@@ -20,19 +20,23 @@ splash = "img/articles/fundamental-rc/splash.png"
 ## Introduction
 
 In this article I'm going to share my understanding of the fudamentals of Radiance Cascades. *(abbreviated as RC)*  
-At it's core, Radiance Cascades is a method for efficiently representing a <span class="highlight">radiance field</span>,  
-allowing us to represent the <span class="highlight">incoming light</span> from/around some area at any point in that area.  
-In 2D that area is usually the screen.
+Over the past months I've build some <span class="highlight">intuitions</span> & understanding of RC, and my goal is to share some of that here with you.  
 
-> For the sake of simplicity I will explain everything in 2D, however RC can be expanded into 3D aswell.  
-> I will also assume the reader has a rudimentary understanding of ray tracing & the concept of irradiance probes.
+This article might be difficult to follow for those who haven't had any <span class="highlight">prior experience</span> with ray tracing & global illumination.  
+Nevertheless, I'll do my best to explains everything in an intuitive way using <span class="highlight">graphics</span>!  
+
+At it's core, Radiance Cascades is a method for efficiently representing a <span class="highlight">radiance field</span> *(light field)*.  
+Which allows us to represent the <span class="highlight">incoming light</span> from/around some area at any point within that area.  
+*In 2D that area is usually the screen.*
+
+> For the sake of simplicity I will explain everything in 2D, however RC can be expanded into 3D aswell.
 
 So, what can RC in 2D *(also referred to as Flatland)* achieve?  
 My implementation is able to compute <span class="highlight">diffuse global illumination</span> in real-time:
 
 {{ video_loop(file = "/anim/articles/fundamental-rc/showcase.mp4", alt = "Diffuse global illumination in flatland.", width = "640px") }}
 
-An awesome property of this method is that this is done <span class="highlight">fully-deterministically</span> and without temporal re-use!  
+An awesome property of this method is that this is done <span class="highlight">fully-deterministically</span>!  
 Furthermore, there are already plenty of clever ways to get its performance to acceptable levels for modern hardware.
 
 *So without further ado, let's dive in!*
@@ -43,6 +47,12 @@ Furthermore, there are already plenty of clever ways to get its performance to a
 
 Radiance Cascades is built on **two** key observations.  
 So first, let's observe these together, and have a <span class="highlight">short recap</span> afterwards.
+
+But, before we observe anything I want clear up what I mean with the following <span class="highlight">terms</span>:
+1. <span class="highlight">radiance</span>: light from a specific direction, at a specific point. *(You can think of this as a ray)*
+2. <span class="highlight">irradiance</span>: light from a subset of directions, at a specific point. *(You can think of this as light from all directions)*
+
+> Because radiance is just one direction, we can build irradiance from a bunch of directions *(radiance)*.
 
 ### Angular Observation
 
