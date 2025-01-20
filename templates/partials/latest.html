@@ -1,9 +1,9 @@
 <div class="latest">
     <!-- Latest blog post -->
-    {% if false %}
     {% set blog_section = get_section(path="blog/_index.md") %}
     {% set blog_filtered = blog_section.pages | filter(attribute="extra.hidden", value=false) %}
     {% set blog_post = blog_filtered | first %}
+    {% if blog_post %}
     <h2 class="title-soft">Latest blog post</h2>
     <article class="post">
         <header>
