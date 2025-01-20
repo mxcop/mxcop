@@ -28,7 +28,7 @@ Since you've found this blog post, it's likely you already know what Surfels are
 Regardless, I will start with a brief explanation of what they are, and what we can use them for.
 
 {{ image(
-    src="/img/blog/surfel-maintenance/surfel-parameters.png", alt="Figure A: The parameters that make up a Surfel.", width="640px"
+    src="/img/blog/surfel-maintenance/surfel-parameters-2.png", alt="Figure A: The parameters that make up a Surfel.", width="640px"
 ) }}
 
 The name Surfel comes from combining the words <span class="highlight">Surface & Element</span>.  
@@ -157,6 +157,9 @@ To achieve this, I used the following 3 passes:
 2. <span class="highlight">Prefix sum</span> *(perform a prefix sum over the entire grid buffer)*
 3. <span class="highlight">Surfel insertion</span> *(for each Surfel decrement the `uint` inside each cell it overlaps and write the Surfel ID into the Surfel list)*
 
+> When looping over the Surfels, we always loop over the entire Surfel buffer.  
+> If the *radius* of a Surfel is 0 we know the Surfel is not live, so we can return early.
+
 ```glsl
 /* <===> Pass 1 <===> */
 for (surfels) for (overlapping cells) {
@@ -212,7 +215,7 @@ for (uint i = start; i < end; ++i) {
     const uint surfel_ptr = surfel_list[i];
 
     /* Use the Surfel ID to fetch it's position & radius */
-    const float3 p = surfel_pos[surfel_ptr];
+    const vec3  p = surfel_pos[surfel_ptr];
     const float r = surfel_radius[surfel_ptr];
 
     /* Find the highest coverage */
@@ -261,7 +264,31 @@ This is where the <span class="highlight">Surfel Stack</span> buffer comes into 
     src="/img/blog/surfel-maintenance/surfel-spawning.png", alt="Figure I: Visualization of spawning a Surfel using the Stack.", width="960px"
 ) }}
 
-> Talk about optimization for this pass (1:4 pixels each frame)
+First of all, as we can see in *Figure I*, the Surfel Stack has to start out filled with all unique Surfel IDs.  
+The order in which they are placed doesn't matter, as long as they're <span class="highlight">all unique</span>.
+
+We can see the spawning sequence in *Figure I*, we simply increment the Surfel Stack pointer.  
+And use the unique ID in the stack as the <span class="highlight">Surfel ID</span> which we can write data into:
+```glsl
+/* Push the Surfel stack (atomic) */
+const uint stack_ptr = atomicAdd(surfel_stack_pointer, 1);
+const uint surfel_ptr = surfel_stack[stack_ptr];
+
+/* Write our new Surfel data into the Surfel buffers */
+surfel_pos[surfel_ptr] = ...;
+surfel_radius[surfel_ptr] = ...;
+```
+
+> For simplicity I left out the bounds check here, but you should make sure the stack isn't full!
+
+#### Spawning Optimization
+
+Because I am managing multiple sets of Surfels, spawning can get pretty expensive.  
+An optimization I came up with is to only <span class="highlight">check 1/4</span> of the pixels for coverage each frame.  
+Cycling through a 2x2 tile of pixels every 4 frames.
+
+On my AMD 890M iGPU this resulted in the total time spend spawning going from:  
+`~6ms` -> `~1ms`, which is a rather huge improvement, without losing any significant quality.
 
 ---
 
