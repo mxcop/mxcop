@@ -13,7 +13,7 @@ name = "surfels"
 color = "amber"
 
 [extra]
-hidden = false
+hidden = true
 +++
 
 <p></p>
@@ -24,7 +24,7 @@ hidden = false
 
 ## Introduction
 
-Since you've found this blog post, it's likely you already know what Surfels are.  
+Since you've found this blog post, it's likely you already know what <span class="highlight">Surfels</span> are.  
 Regardless, I will start with a brief explanation of what they are, and what we can use them for.
 
 {{ image(
@@ -200,7 +200,7 @@ If that coverage is below a certain <span class="highlight">threshold</span>, we
 
 #### Coverage Testing
 
-We can check the coverage for a pixel by checking the <span class="highlight">acceleration structure</span> at the position visible through that pixel:
+We can check the coverage for a pixel by checking the <span class="highlight">acceleration structure</span> of the *previous frame* at the position of the pixel:
 ```glsl
 /* Location in world-space visible through this pixel */
 const vec3 pixel_pos = camera_pos + pixel_dir * pixel_depth;
@@ -270,7 +270,7 @@ The order in which they are placed doesn't matter, as long as they're <span clas
 We can see the spawning sequence in *Figure I*, we simply increment the Surfel Stack pointer.  
 And use the unique ID in the stack as the <span class="highlight">Surfel ID</span> which we can write data into:
 ```glsl
-/* Push the Surfel stack (atomic) */
+/* Pop the Surfel Stack (atomic) */
 const uint stack_ptr = atomicAdd(surfel_stack_pointer, 1);
 const uint surfel_ptr = surfel_stack[stack_ptr];
 
@@ -287,39 +287,126 @@ Because I am managing multiple sets of Surfels, spawning can get pretty expensiv
 An optimization I came up with is to only <span class="highlight">check 1/4</span> of the pixels for coverage each frame.  
 Cycling through a 2x2 tile of pixels every 4 frames.
 
-On my AMD 890M iGPU this resulted in the total time spend spawning going from:  
+On my <span class="highlight">AMD Radeon 890M iGPU</span> this resulted in the total time spend spawning going from:  
 `~6ms` -> `~1ms`, which is a rather huge improvement, without losing any significant quality.
 
 ---
 
 ### Surfel Recycling
 
-> Talk about the idea of recycling Surfels that are no longer relevant.
+If all we do is spawn new Surfels, we will quickly run out of our <span class="highlight">Surfel budget</span>.  
+Lucky for us, most Surfels can be recycled after a while, when they are no longer relevant.
 
-> Explain different info which we can use for deciding when to recycle a Surfel.
+#### Recycling Heuristic
 
-> Explain how we push Surfels back onto the Surfel Stack to recycle them.
+The way we decide whether to recycle a Surfel is based on a <span class="highlight">heuristic</span>.  
+This heuristic is usually a combination of a few different parameters:
+1. Time since used *(Last time when the Surfel was sampled)*
+2. Surfel coverage *(How many Surfels are nearby)*
+3. Live Surfel count *(How many Surfels are currently in use)*
+
+To find the Surfel <span class="highlight">coverage</span> we can use the same method we used during spawning to find the coverage.  
+The time since used can be stored on the Surfel, to always be incremented during the recycling pass.  
+We can <span class="highlight">reset that time</span> every time we sample the Surfel's lighting information.
+
+Once we have the heuristic, we can use it as a <span class="highlight">random chance</span> for recycling.  
+Or we can use it as a threshold for deterministic recycling.
+
+#### Despawning Surfels
+
+If we decide to recycle a Surfel we'll have to <span class="highlight">push</span> it back onto the <span class="highlight">Surfel Stack</span>.  
+
+{{ image(
+    src="/img/blog/surfel-maintenance/surfel-recycling.png", alt="Figure J: Visualization of recycling a Surfel using the Stack.", width="640px"
+) }}
+
+All Surfel IDs to the right of the Surfel Stack pointer will always be <span class="highlight">unique IDs</span> to unused Surfel Data.  
+To maintain that while recycling, we can decrement the Surfel Stack pointer, and write out Surfel ID into the Stack slot that just opened up.  
+We can see this <span class="highlight">sequence</span> in *Figure J* where we recycle Surfel ID `8` by pushing it back onto the Surfel Stack.
+```glsl
+/* First set the recycled Surfel's radius to 0.0, marking it as unused */
+surfel_radius[surfel_ptr] = 0.0;
+
+/* Then decrement the stack pointer & write the Surfel ID into the open slot */
+const uint slot = atomicAdd(surfel_stack_pointer, -1) - 1u;
+surfel_stack[slot] = surfel_ptr;
+```
+
+As mentioned ealier, the <span class="highlight">radius</span> is also used when looping over all Surfels to check if the Surfel is <span class="highlight">live</span>.  
+This also allows us to early out during the recycling pass for example:
+```glsl
+/* Compute kernel executed for each Surfel in Surfel Data */
+void main(uint thread_id) {
+    const uint surfel_ptr = thread_id;
+
+    const float radius = surfel_radius[surfel_ptr];
+    if (radius == 0.0) return; /* Early out if this Surfel is not live */
+
+    /* ... */
+}
+```
 
 ---
 
 ### Surfel Transformation
 
-> Explain the issue with moving objects (Surfels ending up inside geometry or in the air)
+During the spawning sequence, when we place Surfels we're currently doing so in <span class="highlight">world-space</span>.  
+Which means that Surfels won't move with the geometry that they're supposed to be attached to.
 
-> Explain the idea of attaching Surfels to object transforms using a global transform buffer.
+#### Transform Buffer
 
-> Unfortunately I didn't get to implementing this yet, should note that!
+Ideally we want to instead attach Surfels to the model matrix *(transform)* of objects in the scene paired with a <span class="highlight">local</span> position.  
+This is what <span class="highlight">GIBS</span> does, they have a buffer filled with the <span class="highlight">transforms</span> of all objects in the scene.  
+When spawning a new Surfel, they assign that Surfel the transform ID of the object they are spawning on.  
+Which points to the model matrix of that object in the global <span class="highlight">transform buffer</span>.
+
+{{ image(
+    src="/img/blog/surfel-maintenance/gibs-transform-gbuffer.png", alt="Figure K: Transform ID Gbuffer from GIBS.", width="640px"
+) }}
+
+To know what transform a Surfel should be attached to when spawning, GIBS has a transform ID <span class="highlight">Gbuffer</span>.  
+We can see a <span class="highlight">debug view</span> of this in *Figure K*, each color represents a different transform ID.
+
+> Unfortunately I cannot go into more detail on this part of the pipeline, because I personally skipped it due to time constraints.
 
 ---
 
 ## Performance
 
-> Give some performance metrics on my AMD Radeon 890M iGPU.
+We're almost at the end of the blog post now, so let's look at some <span class="highlight">performance measurements</span>.  
+Keep in mind that these timings are for <span class="highlight">6</span> individual Cascades of Surfels, so you can expect timings normally to be better.
 
-> Maybe note some ideas for increasing stability & performance?
+> Each Surfel Cascade has `1/4` the Surfel count of the previous one, with the first having `262.144` Surfels at most.
+
+{{ image(
+    src="/img/blog/surfel-maintenance/surfel-performance-890m.png", alt="Figure L: Captured on AMD 890M iGPU. (6 Surfel Cascades)", width="960px"
+) }}
+
+First, here's the performance on my <span class="highlight">AMD Radeon 890M</span> integrated GPU, we can see that the hash insertion *(Surfel Insertion)* is the most expensive part.  
+This is because it requires us to wait for an <span class="highlight">atomic operation</span> to complete, because we need to know which Surfel List index to insert the Surfel into.  
+Besides that, I'd argue the performance is quite good, especially because this is maintaining 6 sets of Surfels.
+
+{{ image(
+    src="/img/blog/surfel-maintenance/surfel-performance-4070.png", alt="Figure M: Captured on RTX 4070 Mobile. (6 Surfel Cascades)", width="960px"
+) }}
+
+Now let's look at the performance on my <span class="highlight">NVIDIA RTX 4070</span> Mobile GPU.  
+We can see here that the hash insertion has gone down quite a bit, and now the <span class="highlight">recycling pass</span> is actually the most expensive pass.  
+However, again I'd argue the <span class="highlight">overhead</span> of maintenance is <span class="highlight">relatively small</span> here.
 
 ---
 
 ## Conclusion
 
-> ...
+To round this off, we've looked at how we can maintain a large number of Surfels in an efficient manor.  
+We took a <span class="highlight">high level</span> overview of the entire pipeline, and then went into the <span class="highlight">details</span> of each maintenance pass.  
+And in the end we briefly looked at performance on 2 modern GPUs.
+
+It took me quite some research and <span class="highlight">trail & error</span> to figure out some of the details.  
+So, I hope this blog post sheds some more light on the details of how to maintain Surfels.  
+
+### Resources
+
+I will link some resources here which may help you on your <span class="highlight">Surfel journey</span> :)
+- Hybrid Rendering for Real-Time Ray Tracing [Ray Tracing Gems 2019](https://media.contentapi.ea.com/content/dam/ea/seed/presentations/2019-ray-tracing-gems-chapter-25-barre-brisebois-et-al.pdf).
+- SIGGRAPH 2021, GIBS [https://youtu.be/h1ocYFrtsM4](https://youtu.be/h1ocYFrtsM4).
