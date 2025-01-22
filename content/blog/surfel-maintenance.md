@@ -2,7 +2,7 @@
 title = "Surfel Maintenance for Global Illumination"
 description = "A comprehensive explanation of my implementation of Surfel probe maintenance."
 authors = [ "Max &lt;mxcop&gt;" ]
-date = 2025-01-16
+date = 2025-01-22
 
 [[extra.tags]]
 name = "graphics"
@@ -13,7 +13,7 @@ name = "surfels"
 color = "amber"
 
 [extra]
-hidden = true
+hidden = false
 splash = "img/blog/surfel-maintenance/surfel-splash.png"
 +++
 
