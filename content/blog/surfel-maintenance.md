@@ -1,6 +1,6 @@
 +++
 title = "Surfel Maintenance for Global Illumination"
-description = "A comprehensive explanation of mass Surfel probe maintenance."
+description = "A comprehensive explanation of my implementation of Surfel probe maintenance."
 authors = [ "Max &lt;mxcop&gt;" ]
 date = 2025-01-16
 
@@ -14,26 +14,26 @@ color = "amber"
 
 [extra]
 hidden = true
-splash = "img/blog/surfel-maintenance/surfels.png"
+splash = "img/blog/surfel-maintenance/surfel-splash.png"
 +++
-
-<p></p>
-
-{{ image(
-    src="/img/blog/surfel-maintenance/surfels.png", width="640px"
-) }}
 
 ## Introduction
 
 Since you've found this blog post, it's likely you already know what <span class="highlight">Surfels</span> are.  
 Regardless, I will start with a brief explanation of what they are, and what we can use them for.
 
-{{ image(
-    src="/img/blog/surfel-maintenance/surfel-parameters-2.png", alt="Figure A: The parameters that make up a Surfel.", width="640px"
+Surfels can be used to <span class="highlight">divide up</span> the surface of <span class="highlight">geometry</span> into discrete patches.  
+This is very useful for <span class="highlight">caching lighting</span> information for example in the case of Global Illumination.
+
+We can see this division of the surface of geometry <span class="highlight">below</span> here, where each Surfel patch is given a random color.
+
+{{ image_2x1(
+    src1="/img/blog/surfel-maintenance/surfels.png", alt1="Surfels discretizing scene geometry into patches.", width1="610px",
+    src2="/img/blog/surfel-maintenance/surfel-parameters-2.png", alt2="Figure A: The parameters that make up a Surfel.", width2="550px"
 ) }}
 
 The name Surfel comes from combining the words <span class="highlight">Surface & Element</span>.  
-Surfels are described using 3 parameters:
+Surfels are commonly described using 3 parameters:
 1. <b style="color: #4dabf7">Position</b> *(Position on a surface)*
 2. <b style="color: #40c057">Radius</b> *(How much area the Surfel represents on the surface)*
 3. <b style="color: #ffc034">Normal</b> *(Normal of the surface)*
@@ -41,16 +41,19 @@ Surfels are described using 3 parameters:
 In *Figure A*, we can see a visual of these 3 parameters.
 
 You may be wondering now *what are these Surfels useful for?*  
-At it's core Surfels are a dynamic <span class="highlight">probe placement strategy</span>, a way to distribute probes on scene geometry.  
-So, it is not limited to one use case only, however I personally used it for capturing <span class="highlight">Global Illumination</span>. 
+At it's core Surfels are a method for <span class="highlight">dividing up</span> scene geometry into discrete patches, as I mentioned above.  
+So, it is not limited to one use case only, however it is commonly used for caching lighting information for <span class="highlight">Global Illumination</span>. 
 
 {{ image_2x1(
     src1="/img/blog/surfel-maintenance/surfel-radiance-cascades.png", alt1="Figure B: Surfel Radiance Cascades. (by me)", width1="550px",
     src2="/img/blog/surfel-maintenance/ea-gibs.png", alt2="Figure C: EA SEED's GIBS.", width2="550px"
 ) }}
 
-I also highly recommend you to check out EA SEED's [GIBS](https://www.ea.com/seed/news/siggraph21-global-illumination-surfels) *(Global Illumination based on Surfels)*  
+I highly recommend you to check out EA SEED's [GIBS](https://www.ea.com/seed/news/siggraph21-global-illumination-surfels) *(Global Illumination based on Surfels)*  
 Their talk at <span class="highlight">SIGGRAPH 21</span> has been my primary source for information on Surfels.
+
+A big advantage of Surfels as a light information cache, is that Surfels persist between frames.  
+So, we can simply <span class="highlight">accumulate</span> information within them between frames, without a need for reprojection.
 
 Now that we know what a Surfel is made out of, and what we can use it for.  
 Let's dive into how I <span class="highlight">dynamically managed</span> Surfels for my Global Illumination solution specifically.
@@ -150,13 +153,13 @@ This <span class="highlight">applies to all</span> the acceleration structure va
     src="/img/blog/surfel-maintenance/surfel-grid-list.png", alt="Figure H: Visualization of the grid & list structure.", width="640px"
 ) }}
 
-As we can see in *Figure H*, the idea is that after the passes the grid buffer points to a <span class="highlight">range of elements</span> in the Surfel list buffer.  
+As we can see in *Figure H*, the idea is that after the passes, the grid buffer points to a <span class="highlight">range of elements</span> in the Surfel list buffer.  
 Because a Surfel can be in multiple cells, the Surfel list can contain <span class="highlight">duplicate IDs</span>.
 
 To achieve this, I used the following 3 passes:
-1. <span class="highlight">Surfel counting</span> *(for each Surfel increment the `uint` inside each cell it overlaps)*
+1. <span class="highlight">Surfel counting</span> *(for each Surfel, increment the `uint` inside each cell it overlaps)*
 2. <span class="highlight">Prefix sum</span> *(perform a prefix sum over the entire grid buffer)*
-3. <span class="highlight">Surfel insertion</span> *(for each Surfel decrement the `uint` inside each cell it overlaps and write the Surfel ID into the Surfel list)*
+3. <span class="highlight">Surfel insertion</span> *(for each Surfel, decrement the `uint` inside each cell it overlaps and write the Surfel ID into the Surfel list)*
 
 > When looping over the Surfels, we always loop over the entire Surfel buffer.  
 > If the *radius* of a Surfel is 0 we know the Surfel is not live, so we can return early.
@@ -238,7 +241,7 @@ const uint score = min(65535u, (uint)(coverage * 1000.0));
 const uint candidate = ((score << 16u) & 0xffff0000) | (local_idx & 0x0000ffff);
 ```
 The reason we add the local index is make each pixel have a unique `uint`.  
-Because, now we're going to perform a <span class="highlight">atomic minimum</span> on that group shared `uint`.
+Because, now we're going to perform an <span class="highlight">atomic minimum</span> on that group shared `uint`.
 ```glsl
 gs_candidate = 0xFFFFFFFF; /* Reset the groupshared candidate */
 barrier();
@@ -408,6 +411,7 @@ So, I hope this blog post sheds some more light on the details of how to maintai
 
 ### Resources
 
-I will link some resources here which may help you on your <span class="highlight">Surfel journey</span> :)
+Here's a few resources which helped me on my <span class="highlight">Surfel journey</span> :)
 - Hybrid Rendering for Real-Time Ray Tracing [Ray Tracing Gems 2019](https://media.contentapi.ea.com/content/dam/ea/seed/presentations/2019-ray-tracing-gems-chapter-25-barre-brisebois-et-al.pdf).
 - SIGGRAPH 2021, GIBS [https://youtu.be/h1ocYFrtsM4](https://youtu.be/h1ocYFrtsM4).
+- Surfel GI implementation in `kajiya` by Tomasz [https://github.com/h3r2tic/kajiya](https://github.com/h3r2tic/kajiya)
