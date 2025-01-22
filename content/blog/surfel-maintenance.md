@@ -402,7 +402,7 @@ However, again I'd argue the <span class="highlight">overhead</span> of maintena
 
 ## Conclusion
 
-To round this off, we've looked at how we can maintain a large number of Surfels in an efficient manor.  
+To round this off, we've looked at how we can maintain a large number of Surfels in an efficient manner.  
 We took a <span class="highlight">high level</span> overview of the entire pipeline, and then went into the <span class="highlight">details</span> of each maintenance pass.  
 And in the end we briefly looked at performance on 2 modern GPUs.
 
