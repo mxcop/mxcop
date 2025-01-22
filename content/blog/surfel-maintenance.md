@@ -1,6 +1,6 @@
 +++
 title = "Surfel Maintenance for Global Illumination"
-description = "A comprehensive explanation of mass Surfel probe maintenance."
+description = "A comprehensive explanation of my implementation of Surfel probe maintenance."
 authors = [ "Max &lt;mxcop&gt;" ]
 date = 2025-01-16
 
