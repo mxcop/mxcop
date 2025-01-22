@@ -14,26 +14,26 @@ color = "amber"
 
 [extra]
 hidden = true
-splash = "img/blog/surfel-maintenance/surfels.png"
+splash = "img/blog/surfel-maintenance/surfel-splash.png"
 +++
-
-<p></p>
-
-{{ image(
-    src="/img/blog/surfel-maintenance/surfels.png", width="640px"
-) }}
 
 ## Introduction
 
 Since you've found this blog post, it's likely you already know what <span class="highlight">Surfels</span> are.  
 Regardless, I will start with a brief explanation of what they are, and what we can use them for.
 
-{{ image(
-    src="/img/blog/surfel-maintenance/surfel-parameters-2.png", alt="Figure A: The parameters that make up a Surfel.", width="640px"
+Surfels can be used to <span class="highlight">divide up</span> the surface of <span class="highlight">geometry</span> into discrete patches.  
+This is very useful for <span class="highlight">caching lighting</span> information for example in the case of Global Illumination.
+
+We can see this division of the surface of geometry <span class="highlight">below</span> here, where each Surfel patch is given a random color.
+
+{{ image_2x1(
+    src1="/img/blog/surfel-maintenance/surfels.png", alt1="Surfels discretizing scene geometry into patches.", width1="610px",
+    src2="/img/blog/surfel-maintenance/surfel-parameters-2.png", alt2="Figure A: The parameters that make up a Surfel.", width2="550px"
 ) }}
 
 The name Surfel comes from combining the words <span class="highlight">Surface & Element</span>.  
-Surfels are described using 3 parameters:
+Surfels are commonly described using 3 parameters:
 1. <b style="color: #4dabf7">Position</b> *(Position on a surface)*
 2. <b style="color: #40c057">Radius</b> *(How much area the Surfel represents on the surface)*
 3. <b style="color: #ffc034">Normal</b> *(Normal of the surface)*
@@ -41,16 +41,19 @@ Surfels are described using 3 parameters:
 In *Figure A*, we can see a visual of these 3 parameters.
 
 You may be wondering now *what are these Surfels useful for?*  
-At it's core Surfels are a dynamic <span class="highlight">probe placement strategy</span>, a way to distribute probes on scene geometry.  
-So, it is not limited to one use case only, however I personally used it for capturing <span class="highlight">Global Illumination</span>. 
+At it's core Surfels are a method for <span class="highlight">dividing up</span> scene geometry into discrete patches, as I mentioned above.  
+So, it is not limited to one use case only, however it is commonly used for caching lighting information for <span class="highlight">Global Illumination</span>. 
 
 {{ image_2x1(
     src1="/img/blog/surfel-maintenance/surfel-radiance-cascades.png", alt1="Figure B: Surfel Radiance Cascades. (by me)", width1="550px",
     src2="/img/blog/surfel-maintenance/ea-gibs.png", alt2="Figure C: EA SEED's GIBS.", width2="550px"
 ) }}
 
-I also highly recommend you to check out EA SEED's [GIBS](https://www.ea.com/seed/news/siggraph21-global-illumination-surfels) *(Global Illumination based on Surfels)*  
+I highly recommend you to check out EA SEED's [GIBS](https://www.ea.com/seed/news/siggraph21-global-illumination-surfels) *(Global Illumination based on Surfels)*  
 Their talk at <span class="highlight">SIGGRAPH 21</span> has been my primary source for information on Surfels.
+
+A big advantage of Surfels as a light information cache, is that Surfels persist between frames.  
+So, we can simply <span class="highlight">accumulate</span> information within them between frames, without a need for reprojection.
 
 Now that we know what a Surfel is made out of, and what we can use it for.  
 Let's dive into how I <span class="highlight">dynamically managed</span> Surfels for my Global Illumination solution specifically.
