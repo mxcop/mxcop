@@ -14,6 +14,7 @@ color = "amber"
 
 [extra]
 hidden = true
+splash = "img/blog/surfel-maintenance/surfels.png"
 +++
 
 <p></p>
