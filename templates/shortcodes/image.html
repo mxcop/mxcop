@@ -1,8 +1,16 @@
 <div class="img">
-    {% if width %}
-    <img src="{{ get_url(path = src) }}" width="{{width}}" alt="{{alt | safe}}" title="{{alt | safe}}">
+    {% if alt %}
+        {% if width %}
+            <img src="{{ get_url(path = src) }}" width="{{width}}" alt="{{alt | safe}}" title="{{alt | safe}}">
+        {% else %}
+            <img src="{{ get_url(path = src) }}" width="360px" alt="{{alt | safe}}" title="{{alt | safe}}">
+        {% endif %}
+        <i>{{alt | safe}}</i>
     {% else %}
-    <img src="{{ get_url(path = src) }}" width="360px" alt="{{alt | safe}}" title="{{alt | safe}}">
+        {% if width %}
+            <img src="{{ get_url(path = src) }}" width="{{width}}">
+        {% else %}
+            <img src="{{ get_url(path = src) }}" width="360px">
+        {% endif %}
     {% endif %}
-    <i>{{alt | safe}}</i>
 </div>
