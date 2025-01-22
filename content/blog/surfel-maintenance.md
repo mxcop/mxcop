@@ -150,13 +150,13 @@ This <span class="highlight">applies to all</span> the acceleration structure va
     src="/img/blog/surfel-maintenance/surfel-grid-list.png", alt="Figure H: Visualization of the grid & list structure.", width="640px"
 ) }}
 
-As we can see in *Figure H*, the idea is that after the passes the grid buffer points to a <span class="highlight">range of elements</span> in the Surfel list buffer.  
+As we can see in *Figure H*, the idea is that after the passes, the grid buffer points to a <span class="highlight">range of elements</span> in the Surfel list buffer.  
 Because a Surfel can be in multiple cells, the Surfel list can contain <span class="highlight">duplicate IDs</span>.
 
 To achieve this, I used the following 3 passes:
-1. <span class="highlight">Surfel counting</span> *(for each Surfel increment the `uint` inside each cell it overlaps)*
+1. <span class="highlight">Surfel counting</span> *(for each Surfel, increment the `uint` inside each cell it overlaps)*
 2. <span class="highlight">Prefix sum</span> *(perform a prefix sum over the entire grid buffer)*
-3. <span class="highlight">Surfel insertion</span> *(for each Surfel decrement the `uint` inside each cell it overlaps and write the Surfel ID into the Surfel list)*
+3. <span class="highlight">Surfel insertion</span> *(for each Surfel, decrement the `uint` inside each cell it overlaps and write the Surfel ID into the Surfel list)*
 
 > When looping over the Surfels, we always loop over the entire Surfel buffer.  
 > If the *radius* of a Surfel is 0 we know the Surfel is not live, so we can return early.
@@ -238,7 +238,7 @@ const uint score = min(65535u, (uint)(coverage * 1000.0));
 const uint candidate = ((score << 16u) & 0xffff0000) | (local_idx & 0x0000ffff);
 ```
 The reason we add the local index is make each pixel have a unique `uint`.  
-Because, now we're going to perform a <span class="highlight">atomic minimum</span> on that group shared `uint`.
+Because, now we're going to perform an <span class="highlight">atomic minimum</span> on that group shared `uint`.
 ```glsl
 gs_candidate = 0xFFFFFFFF; /* Reset the groupshared candidate */
 barrier();
@@ -408,6 +408,7 @@ So, I hope this blog post sheds some more light on the details of how to maintai
 
 ### Resources
 
-I will link some resources here which may help you on your <span class="highlight">Surfel journey</span> :)
+Here's a few resources which helped me on my <span class="highlight">Surfel journey</span> :)
 - Hybrid Rendering for Real-Time Ray Tracing [Ray Tracing Gems 2019](https://media.contentapi.ea.com/content/dam/ea/seed/presentations/2019-ray-tracing-gems-chapter-25-barre-brisebois-et-al.pdf).
 - SIGGRAPH 2021, GIBS [https://youtu.be/h1ocYFrtsM4](https://youtu.be/h1ocYFrtsM4).
+- Surfel GI implementation in `kajiya` by Tomasz [https://github.com/h3r2tic/kajiya](https://github.com/h3r2tic/kajiya)
