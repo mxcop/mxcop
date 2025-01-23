@@ -232,7 +232,7 @@ for (uint i = start; i < end; ++i) {
 Now, in order to efficiently <span class="highlight">communicate</span> across the 16x16 tile of pixels on the GPU we can use <span class="highlight">group shared memory</span>.  
 The idea is simple, we have a single `uint` as group shared memory, groups are 16x16 lanes in size.  
 ```glsl
-coherent uint gs_candidate;
+shared uint gs_candidate;
 ```
 Each lane corresponds to a pixel in a 16x16 tile, and will combine its coverage & local index into a `uint`:
 ```glsl
