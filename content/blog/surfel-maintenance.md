@@ -2,7 +2,7 @@
 title = "Surfel Maintenance for Global Illumination"
 description = "A comprehensive explanation of my implementation of Surfel probe maintenance."
 authors = [ "Max &lt;mxcop&gt;" ]
-date = 2025-01-16
+date = 2025-01-22
 
 [[extra.tags]]
 name = "graphics"
@@ -13,7 +13,7 @@ name = "surfels"
 color = "amber"
 
 [extra]
-hidden = true
+hidden = false
 splash = "img/blog/surfel-maintenance/surfel-splash.png"
 +++
 
@@ -232,7 +232,7 @@ for (uint i = start; i < end; ++i) {
 Now, in order to efficiently <span class="highlight">communicate</span> across the 16x16 tile of pixels on the GPU we can use <span class="highlight">group shared memory</span>.  
 The idea is simple, we have a single `uint` as group shared memory, groups are 16x16 lanes in size.  
 ```glsl
-coherent uint gs_candidate;
+shared uint gs_candidate;
 ```
 Each lane corresponds to a pixel in a 16x16 tile, and will combine its coverage & local index into a `uint`:
 ```glsl
@@ -402,7 +402,7 @@ However, again I'd argue the <span class="highlight">overhead</span> of maintena
 
 ## Conclusion
 
-To round this off, we've looked at how we can maintain a large number of Surfels in an efficient manor.  
+To round this off, we've looked at how we can maintain a large number of Surfels in an efficient manner.  
 We took a <span class="highlight">high level</span> overview of the entire pipeline, and then went into the <span class="highlight">details</span> of each maintenance pass.  
 And in the end we briefly looked at performance on 2 modern GPUs.
 
