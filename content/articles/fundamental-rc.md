@@ -496,7 +496,7 @@ Then finally we can combine the `bilinear_dir_index` & `bilinear_index` to get t
 /* Convert the directional index to a local texel coordinate */
 const ivec2 bilinear_dir_coord = ivec2(
     bilinear_dir_index % bilinear_size.x,
-    bilinear_dir_index / bilinear_size.y
+    bilinear_dir_index / bilinear_size.x
 );
 
 /* Get the texel coordinate to merge with in cascade N+1 */

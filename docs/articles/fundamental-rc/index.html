@@ -79,7 +79,7 @@
 </span></code></pre><p>Then finally we can combine the <code>bilinear_dir_index</code> & <code>bilinear_index</code> to get the <span class=highlight>texel</span> coordinate in cascade <strong>N+1</strong> to merge with.<pre class=language-glsl data-lang=glsl style=color:#e8d4c0;background-color:#191919><code class=language-glsl data-lang=glsl><span style=color:#7a7267>/* Convert the directional index to a local texel coordinate */
 </span><span style=color:#db784d>const </span><span style=color:#95cc5e>ivec2</span><span> bilinear_dir_coord </span><span style=color:#db784d>= </span><span style=color:#95cc5e>ivec2</span><span>(
 </span><span>    bilinear_dir_index </span><span style=color:#db784d>%</span><span> bilinear_size.</span><span style=color:#f8bb39>x</span><span>,
-</span><span>    bilinear_dir_index </span><span style=color:#db784d>/</span><span> bilinear_size.</span><span style=color:#f8bb39>y
+</span><span>    bilinear_dir_index </span><span style=color:#db784d>/</span><span> bilinear_size.</span><span style=color:#f8bb39>x
 </span><span>);
 </span><span>
 </span><span style=color:#7a7267>/* Get the texel coordinate to merge with in cascade N+1 */
