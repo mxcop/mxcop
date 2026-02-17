@@ -3,12 +3,14 @@
 
 <!-- CSS -->
 <link rel="stylesheet" href="{{ get_url(path="sections/posts.css", trailing_slash=false) }}">
+<link rel="stylesheet" href="{{ get_url(path="sections/projects.css", trailing_slash=false) }}">
 
 {% endblock head %}
 
 <!-- Content -->
 {% block content %}
 
+{% include "partials/projects.html" %}
 {% include "partials/latest.html" %}
 
 {% endblock content %}

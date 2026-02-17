@@ -1,40 +1,10 @@
 <div class="latest">
-    <!-- Latest blog post -->
-    {% set blog_section = get_section(path="blog/_index.md") %}
-    {% set blog_filtered = blog_section.pages | filter(attribute="extra.hidden", value=false) %}
-    {% set blog_post = blog_filtered | first %}
-    {% if blog_post %}
-    <h2 class="title-soft">Latest blog post</h2>
-    <article class="post">
-        <header>
-            <h2>
-                <i class="ico blog-link"></i>
-                {{ blog_post.title | safe }}
-            </h2>
-            <div class="tags">
-                {% if blog_post.extra.tags %}
-                {% for tag in blog_post.extra.tags %}
-                <p class="tag {{ tag.color }}">{{ tag.name | safe }}</p>
-                {% endfor %}
-                {% endif %}
-            </div>
-        </header>
-
-        <footer>
-            <p>{{ blog_post.description }}</p>
-            <p class="date">{{ blog_post.date | date(format="%Y-%m-%d") }}</p>
-        </footer>
-
-        <a class="post-link" href="{{ blog_post.permalink }}"></a>
-    </article>
-    {% endif %}
-
-    <!-- Latest article post -->
+    <h2 class="title-soft">Latest Articles</h2>
+    <!-- Latest article posts -->
     {% set article_section = get_section(path="articles/_index.md") %}
     {% set article_filtered = article_section.pages | filter(attribute="extra.hidden", value=false) %}
-    {% set article_post = article_filtered | first %}
+    {% for article_post in article_filtered | slice(end=6) %}
     {% if article_post %}
-    <h2 class="title-soft">Latest article</h2>
     <article class="post">
         <header>
             <h2>
@@ -58,4 +28,5 @@
         <a class="post-link" href="{{ article_post.permalink }}"></a>
     </article>
     {% endif %}
+    {% endfor %}
 </div>

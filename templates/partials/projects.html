@@ -1,0 +1,44 @@
+<div class="projects">
+  <h2 class="title-soft">Projects</h2>
+  <div class="cards">
+    {% set projects = get_section(path="projects/_index.md") %}
+    {% for project in projects.pages | slice(end=6) %}
+    <article class="project">
+      {% if project.extra.thumbnail %}
+      <div class="thumbnail" style="background-image: url('{{ project.extra.thumbnail }}')"></div>
+      {% endif %}
+
+      <header>
+          <h2>{{ project.title | safe }}</h2>
+          <p>{{ project.description }}</p>
+      </header>
+
+      <footer>
+          <div class="info">
+            <div class="team">
+              <svg width="24" height="15" viewBox="0 0 24 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0C12.9283 0 13.8185 0.368749 14.4749 1.02513C15.1313 1.6815 15.5 2.57174 15.5 3.5C15.5 4.42826 15.1313 5.3185 14.4749 5.97487C13.8185 6.63125 12.9283 7 12 7C11.0717 7 10.1815 6.63125 9.52513 5.97487C8.86875 5.3185 8.5 4.42826 8.5 3.5C8.5 2.57174 8.86875 1.6815 9.52513 1.02513C10.1815 0.368749 11.0717 0 12 0ZM5 2.5C5.56 2.5 6.08 2.65 6.53 2.92C6.38 4.35 6.8 5.77 7.66 6.88C7.16 7.84 6.16 8.5 5 8.5C4.20435 8.5 3.44129 8.18393 2.87868 7.62132C2.31607 7.05871 2 6.29565 2 5.5C2 4.70435 2.31607 3.94129 2.87868 3.37868C3.44129 2.81607 4.20435 2.5 5 2.5ZM19 2.5C19.7956 2.5 20.5587 2.81607 21.1213 3.37868C21.6839 3.94129 22 4.70435 22 5.5C22 6.29565 21.6839 7.05871 21.1213 7.62132C20.5587 8.18393 19.7956 8.5 19 8.5C17.84 8.5 16.84 7.84 16.34 6.88C17.2115 5.75423 17.6161 4.33616 17.47 2.92C17.92 2.65 18.44 2.5 19 2.5ZM5.5 12.75C5.5 10.68 8.41 9 12 9C15.59 9 18.5 10.68 18.5 12.75V14.5H5.5V12.75ZM0 14.5V13C0 11.61 1.89 10.44 4.45 10.1C3.86 10.78 3.5 11.72 3.5 12.75V14.5H0ZM24 14.5H20.5V12.75C20.5 11.72 20.14 10.78 19.55 10.1C22.11 10.44 24 11.61 24 13V14.5Z" fill="currentColor"/>
+              </svg>
+              {{ project.extra.team | safe }}
+            </div>
+            <div class="duration">
+              <svg width="15" height="18" viewBox="0 0 15 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.3583 5.325L14.5417 4.14167C14.1667 3.71667 13.7917 3.33333 13.3667 2.96667L12.1833 4.16667C10.8917 3.11667 9.26667 2.5 7.5 2.5C5.51088 2.5 3.60322 3.29018 2.1967 4.6967C0.790176 6.10322 0 8.01088 0 10C0 11.9891 0.790176 13.8968 2.1967 15.3033C3.60322 16.7098 5.51088 17.5 7.5 17.5C11.6667 17.5 15 14.1417 15 10C15 8.23333 14.3833 6.60833 13.3583 5.325ZM8.33333 10.8333H6.66667V5H8.33333V10.8333ZM10 0H5V1.66667H10V0Z" fill="currentColor"/>
+              </svg>
+              {{ project.extra.duration | safe }}
+            </div>
+          </div>
+          <div class="tags">
+              {% if project.extra.tags %}
+              {% for tag in project.extra.tags %}
+              <p class="tag" style="background-color: {{ tag.bg }}; color: {{ tag.fg }}">{{ tag.name | safe }}</p>
+              {% endfor %}
+              {% endif %}
+          </div>
+      </footer>
+
+      <a class="project-link" href="{{ project.permalink }}"></a>
+    </article>
+    {% endfor %}
+  </div>
+</div>

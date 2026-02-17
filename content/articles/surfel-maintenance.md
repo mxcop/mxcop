@@ -14,7 +14,7 @@ color = "amber"
 
 [extra]
 hidden = false
-splash = "img/blog/surfel-maintenance/surfel-splash.png"
+splash = "img/articles/surfel-maintenance/surfel-splash.png"
 +++
 
 ## Introduction
