@@ -1,26 +1,17 @@
 +++
-# title = "MOS6502 Emulator"
-# description = "An incomplete MOS6502 processor emulator which taught me a lot about how CPUs work."
-
 title = "Soul Hunters"
-description = "Physically-Based Volumetric Cloud Rendering Plugin For UE5 Based On Nubis."
+description = "Little Co-op Ghost Hunting Mini-Game made with OpenGL as part of a Game Jam."
 date = 2021-03-03
 
 [extra]
-thumbnail = "img/placeholder.jpg"
-team = "Solo"
-duration = "8 Weeks"
-engine = "unreal"
-github = "https://github.com/username/vapor"
+thumbnail = "img/projects/soul-hunters-banner.jpg"
+team = "2"
+duration = "4 Weeks"
+github = "https://github.com/mxcop/soul-hunters"
+itch = "https://gikster007.itch.io/soul-hunters"
 tags = [
-  { name = "graphics", bg = "#0CE0A37F", fg = "#A7F3D0" },
-  { name = "volumetrics", bg = "#B453FF7F", fg = "#D894FF" },
-  { name = "hlsl", bg = "#0CE0A37F", fg = "#A7F3D0" }
+  { name = "c++", bg = "#0CE0A37F", fg = "#A7F3D0" },
+  { name = "opengl", bg = "#B453FF7F", fg = "#D894FF" },
+  { name = "glsl", bg = "#0CE0A37F", fg = "#A7F3D0" }
 ]
 +++
-
-Repo: <[mxcop/6502-Emulator](https://github.com/mxcop/6502-Emulator)>
-
-An incomplete MOS6502 processor emulator which taught me a lot about how CPUs work.
-
-{{ video_loop(file = "/anim/project.mp4") }}

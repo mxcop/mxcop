@@ -1,26 +1,16 @@
 +++
-# title = "MOS6502 Emulator"
-# description = "An incomplete MOS6502 processor emulator which taught me a lot about how CPUs work."
-
 title = "Graphite"
-description = "Physically-Based Volumetric Cloud Rendering Plugin For UE5 Based On Nubis."
+description = "Cross-platform Render Graph created for, and used for, the Kudzu and Thermite Engine's."
 date = 2021-03-03
 
 [extra]
-thumbnail = "img/placeholder.jpg"
-team = "Solo"
-duration = "8 Weeks"
-engine = "unreal"
-github = "https://github.com/username/vapor"
+thumbnail = "img/projects/graphite-banner.jpg"
+team = "1-2"
+duration = "20 Weeks"
+github = "https://github.com/mxcop/graphite"
 tags = [
-  { name = "graphics", bg = "#0CE0A37F", fg = "#A7F3D0" },
-  { name = "volumetrics", bg = "#B453FF7F", fg = "#D894FF" },
-  { name = "hlsl", bg = "#0CE0A37F", fg = "#A7F3D0" }
+  { name = "c++", bg = "#0CE0A37F", fg = "#A7F3D0" },
+  { name = "ps5", bg = "#2E93FF7F", fg = "#85DAFC" },
+  { name = "vulkan", bg = "#FF2E2E7F", fg = "#FCA985" }
 ]
 +++
-
-Repo: <[mxcop/6502-Emulator](https://github.com/mxcop/6502-Emulator)>
-
-An incomplete MOS6502 processor emulator which taught me a lot about how CPUs work.
-
-{{ video_loop(file = "/anim/project.mp4") }}
