@@ -1,6 +1,19 @@
 .projects {
     margin-top: 2rem;
 
+    > p {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 16px;
+        margin: 0 0 32px 0;
+        width: 100%;
+        border-bottom: 1px solid var(--c-panel-2);
+        font-style: italic;
+        gap: 8px;
+        color: var(--c-text-2);
+    }
+
     .cards {
         grid-column: 2 / span 12;
         display: grid;
@@ -16,13 +29,13 @@
     width: fit-content;
     max-width: 100%;
     background: var(--c-panel-1);
+    color: var(--c-stone-100);
     padding: 1.0rem;
     border-radius: 12px;
-    margin-bottom: 16px;
     line-height: 18px;
     grid-column-end: span 4;
     overflow: hidden;
-    border: 3px solid #FFFFFF10;
+    border: 3px solid var(--c-panel-1);
 
     .thumbnail {
         position: absolute;
@@ -63,11 +76,9 @@
         display: flex;
         justify-content: flex-end;
         flex-direction: column;
-        color: var(--c-text-2);
 
         .info {
             display: inline-flex;
-            color: var(--c-text-1);
             font-weight: bold;
             gap: 16px;
             margin: 32px 0 0 0;

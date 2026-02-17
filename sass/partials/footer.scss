@@ -12,9 +12,19 @@ footer.site-footer {
         margin: auto;
     }
 
+    .socials {
+        margin-top: 1rem;
+        display: inline-flex;
+        gap: 8px;
+
+        a {
+            color: var(--c-stone-100);
+        }
+    }
+
     i {
         color: var(--c-text-3);
         font-size: 14px;
-        margin-top: 2rem;
+        margin-top: 1rem;
     }
 }

@@ -1,18 +1,18 @@
 <script>
 /* Set starting theme */
-if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark");
-} else if (localStorage.getItem("theme") === "light") {
-    document.body.classList.remove("dark")
-} else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    document.body.classList.add("dark");
-}
+// if (localStorage.getItem("theme") === "dark") {
+//     document.body.classList.add("dark");
+// } else if (localStorage.getItem("theme") === "light") {
+//     document.body.classList.remove("dark")
+// } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+//     document.body.classList.add("dark");
+// }
 
 /* Toggle the current theme */
-const toggleDark = () => {
-    document.body.classList.toggle("dark");
-    localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-}
+// const toggleDark = () => {
+//     document.body.classList.toggle("dark");
+//     localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+// }
 </script>
 
 <div class="navbar">
@@ -25,10 +25,22 @@ const toggleDark = () => {
             <!-- <a href="{{ get_url(path="about", trailing_slash=false) | safe }}">About</a> -->
             <!-- <a href="{{ get_url(path="contact", trailing_slash=true) | safe }}">Contact</a> -->
         </nav>
-        <div class="theme-toggle">
+        <!-- <div class="theme-toggle">
             <button class="ico-btn" onclick="toggleDark()">
                 <i class="ico theme"></i>
             </button>
+        </div> -->
+        <div class="socials">
+            <a class="ico-link" href="https://bsky.app/profile/m4xc.bsky.social">
+                <svg width="24" height="24" viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.20982 0.604205C3.37862 1.4817 4.63572 3.26088 5.09735 4.21559C5.55897 3.26088 6.81607 1.4817 7.98487 0.604205C8.82821 -0.0289414 10.1947 -0.518804 10.1947 1.04003C10.1947 1.35136 10.0162 3.65536 9.91151 4.02946C9.54761 5.32984 8.22158 5.66153 7.04198 5.46078C9.10382 5.8117 9.62833 6.97405 8.49556 8.13637C6.34428 10.3439 5.40354 7.58251 5.16254 6.87493C5.11833 6.74523 5.09762 6.68458 5.09735 6.73615C5.09703 6.68454 5.07636 6.74523 5.03216 6.87493C4.79115 7.58251 3.85041 10.3439 1.69913 8.13637C0.566363 6.97405 1.09087 5.8117 3.15267 5.46078C1.97311 5.66153 0.647084 5.32984 0.283181 4.02946C0.178487 3.65536 0 1.35136 0 1.04003C0 -0.518804 1.36649 -0.0289414 2.20982 0.604205Z" fill="currentColor"/>
+                </svg>
+            </a>
+            <a class="ico-link" href="https://www.linkedin.com/in/mxcop/">
+                <svg width="24" height="24" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.52047 8.52061H7.03879V6.20018C7.03879 5.64686 7.02891 4.93456 6.26816 4.93456C5.49645 4.93456 5.37836 5.53745 5.37836 6.15991V8.52045H3.89672V3.74874H5.3191V4.40084H5.33902C5.48138 4.15746 5.68708 3.95723 5.93422 3.82149C6.18136 3.68575 6.46069 3.61958 6.74246 3.63002C8.24422 3.63002 8.52109 4.61784 8.52109 5.90291L8.52047 8.52061ZM2.22484 3.09651C1.74996 3.09659 1.36492 2.71167 1.36484 2.23678C1.36477 1.7619 1.74965 1.37686 2.22453 1.37678C2.69941 1.37667 3.08445 1.76159 3.08453 2.23647C3.08457 2.46452 2.99402 2.68324 2.8328 2.84453C2.67158 3.00582 2.45289 3.09646 2.22484 3.09651ZM2.9657 8.52065H1.48246V3.74874H2.96566L2.9657 8.52065ZM9.25914 0.000727808H0.73793C0.335195 -0.00380344 0.00492187 0.318814 0 0.721548V9.27831C0.00476563 9.68123 0.335 10.0042 0.737891 9.99995H9.25914C9.66289 10.0049 9.99441 9.68202 10 9.27831V0.720884C9.99426 0.317368 9.6627 -0.00520969 9.25914 6.37458e-05" fill="currentColor"/>
+                </svg>
+            </a>
         </div>
     </div>
 </div>
