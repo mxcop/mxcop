@@ -1,7 +1,7 @@
 +++
 title = "SRC-DGI"
 description = "Surfel Radiance Cascades Diffuse Global Illumination."
-date = 2023-01-01
+weight = 2
 
 [extra]
 thumbnail = "img/projects/src-dgi-banner.jpg"

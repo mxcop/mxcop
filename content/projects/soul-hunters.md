@@ -1,7 +1,7 @@
 +++
 title = "Soul Hunters"
 description = "Little Co-op Ghost Hunting Mini-Game made with OpenGL as part of a Game Jam."
-date = 2021-03-03
+weight = 5
 
 [extra]
 thumbnail = "img/projects/soul-hunters-banner.jpg"

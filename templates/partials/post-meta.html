@@ -1,5 +1,6 @@
 {% set meta = [] %}
 
+{% if page.date %}
 {% set post_date = page.date | date(format="%Y-%m-%d") %}
 
 {% if page.updated %}
@@ -7,6 +8,7 @@
     {% set meta = meta | concat(with='<i title="Originally posted on ' ~ post_date ~ '.">' ~ update_date ~ "</i>") %}
 {% else %}
     {% set meta = meta | concat(with=post_date) %}
+{% endif %}
 {% endif %}
 
 {% set meta = meta | concat(with=page.word_count ~ " words") %}

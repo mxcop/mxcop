@@ -1,7 +1,7 @@
 +++
 title = "Zentera"
 description = "Voxel-based ray-traced puzzle platformer made with our Kudzu Engine we built from scratch."
-date = 2024-01-01
+weight = 1
 
 [extra]
 thumbnail = "img/projects/zentera-banner.jpg"

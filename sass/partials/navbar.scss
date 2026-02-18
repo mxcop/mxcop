@@ -21,6 +21,15 @@
     nav {
         display: flex;
         gap: 24px;
+
+        a {
+            color: var(--c-violet-400);
+            text-decoration: none;
+
+            &:hover {
+                color: var(--c-stone-100);
+            }
+        }
     }
 }
 

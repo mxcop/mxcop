@@ -1,7 +1,7 @@
 +++
 title = "Graphite"
 description = "Cross-platform Render Graph created for, and used for, the Kudzu and Thermite Engine's."
-date = 2021-03-03
+weight = 3
 
 [extra]
 thumbnail = "img/projects/graphite-banner.jpg"

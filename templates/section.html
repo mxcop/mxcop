@@ -34,7 +34,9 @@
 
         <footer>
             <p>{{ page.description }}</p>
+            {% if page.date %}
             <p class="date">{{ page.date | date(format="%Y-%m-%d") }}</p>
+            {% endif %}
         </footer>
 
         <a class="post-link" href="{{ page.permalink }}"></a>
