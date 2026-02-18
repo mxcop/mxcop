@@ -15,17 +15,37 @@
         <lastmod>2024-10-22</lastmod>
     </url>
     <url>
-        <loc>https://m4xc.dev/blog/</loc>
-    </url>
-    <url>
-        <loc>https://m4xc.dev/blog/surfel-maintenance/</loc>
+        <loc>https://m4xc.dev/articles/surfel-maintenance/</loc>
         <lastmod>2025-01-22</lastmod>
     </url>
     <url>
         <loc>https://m4xc.dev/projects/</loc>
     </url>
     <url>
+        <loc>https://m4xc.dev/projects/barnstorm/</loc>
+    </url>
+    <url>
+        <loc>https://m4xc.dev/projects/graphite/</loc>
+    </url>
+    <url>
+        <loc>https://m4xc.dev/projects/light-bvh/</loc>
+    </url>
+    <url>
         <loc>https://m4xc.dev/projects/mos6502/</loc>
-        <lastmod>2021-03-03</lastmod>
+    </url>
+    <url>
+        <loc>https://m4xc.dev/projects/rogue-planets/</loc>
+    </url>
+    <url>
+        <loc>https://m4xc.dev/projects/soul-hunters/</loc>
+    </url>
+    <url>
+        <loc>https://m4xc.dev/projects/src-dgi/</loc>
+    </url>
+    <url>
+        <loc>https://m4xc.dev/projects/vapor/</loc>
+    </url>
+    <url>
+        <loc>https://m4xc.dev/projects/zentera/</loc>
     </url>
 </urlset>
