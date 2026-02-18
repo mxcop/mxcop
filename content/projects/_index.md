@@ -1,5 +1,4 @@
 +++
 title = "Projects"
-template = "sections/projects.html"
-draft = true
+sort_by = "weight"
 +++

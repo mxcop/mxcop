@@ -1,40 +1,13 @@
 <div class="latest">
-    <!-- Latest blog post -->
-    {% set blog_section = get_section(path="blog/_index.md") %}
-    {% set blog_filtered = blog_section.pages | filter(attribute="extra.hidden", value=false) %}
-    {% set blog_post = blog_filtered | first %}
-    {% if blog_post %}
-    <h2 class="title-soft">Latest blog post</h2>
-    <article class="post">
-        <header>
-            <h2>
-                <i class="ico blog-link"></i>
-                {{ blog_post.title | safe }}
-            </h2>
-            <div class="tags">
-                {% if blog_post.extra.tags %}
-                {% for tag in blog_post.extra.tags %}
-                <p class="tag {{ tag.color }}">{{ tag.name | safe }}</p>
-                {% endfor %}
-                {% endif %}
-            </div>
-        </header>
-
-        <footer>
-            <p>{{ blog_post.description }}</p>
-            <p class="date">{{ blog_post.date | date(format="%Y-%m-%d") }}</p>
-        </footer>
-
-        <a class="post-link" href="{{ blog_post.permalink }}"></a>
-    </article>
-    {% endif %}
-
-    <!-- Latest article post -->
+    <p>
+        These are some of my most recent articles I've written!
+        <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24"><path fill="currentColor" d="M17.8 20c-.4 1.2-1.5 2-2.8 2H5c-1.7 0-3-1.3-3-3v-1h12.2c.4 1.2 1.5 2 2.8 2zM19 2c1.7 0 3 1.3 3 3v1h-2V5c0-.6-.4-1-1-1s-1 .4-1 1v13h-1c-.6 0-1-.4-1-1v-1H5V5c0-1.7 1.3-3 3-3zM8 6v2h7V6zm0 4v2h6v-2z"/></svg>
+    </p>
+    <!-- Latest article posts -->
     {% set article_section = get_section(path="articles/_index.md") %}
     {% set article_filtered = article_section.pages | filter(attribute="extra.hidden", value=false) %}
-    {% set article_post = article_filtered | first %}
+    {% for article_post in article_filtered | slice(end=6) %}
     {% if article_post %}
-    <h2 class="title-soft">Latest article</h2>
     <article class="post">
         <header>
             <h2>
@@ -58,4 +31,5 @@
         <a class="post-link" href="{{ article_post.permalink }}"></a>
     </article>
     {% endif %}
+    {% endfor %}
 </div>

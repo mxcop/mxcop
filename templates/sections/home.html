@@ -3,12 +3,33 @@
 
 <!-- CSS -->
 <link rel="stylesheet" href="{{ get_url(path="sections/posts.css", trailing_slash=false) }}">
+<link rel="stylesheet" href="{{ get_url(path="sections/projects.css", trailing_slash=false) }}">
+
+<style>
+.home-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.home-title {
+    margin: 0;
+}
+.home-subtitle {
+    margin: 0;
+}
+</style>
 
 {% endblock head %}
 
 <!-- Content -->
 {% block content %}
 
+<div class="home-hero">
+<h2 class="home-title">Hi! I'm Max.</h2>
+<p class="home-subtitle">Rendering/Software Engineer.</p>
+</div>
+
+{% include "partials/projects.html" %}
 {% include "partials/latest.html" %}
 
 {% endblock content %}

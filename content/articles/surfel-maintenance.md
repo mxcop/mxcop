@@ -14,7 +14,7 @@ color = "amber"
 
 [extra]
 hidden = false
-splash = "img/blog/surfel-maintenance/surfel-splash.png"
+splash = "img/articles/surfel-maintenance/surfel-splash.png"
 +++
 
 ## Introduction
@@ -28,8 +28,8 @@ This is very useful for <span class="highlight">caching lighting</span> informat
 We can see this division of the surface of geometry <span class="highlight">below</span> here, where each Surfel patch is given a random color.
 
 {{ image_2x1(
-    src1="/img/blog/surfel-maintenance/surfels.png", alt1="Surfels discretizing scene geometry into patches.", width1="610px",
-    src2="/img/blog/surfel-maintenance/surfel-parameters-2.png", alt2="Figure A: The parameters that make up a Surfel.", width2="550px"
+    src1="/img/articles/surfel-maintenance/surfels.png", alt1="Surfels discretizing scene geometry into patches.", width1="610px",
+    src2="/img/articles/surfel-maintenance/surfel-parameters-2.png", alt2="Figure A: The parameters that make up a Surfel.", width2="550px"
 ) }}
 
 The name Surfel comes from combining the words <span class="highlight">Surface & Element</span>.  
@@ -45,8 +45,8 @@ At it's core Surfels are a method for <span class="highlight">dividing up</span>
 So, it is not limited to one use case only, however it is commonly used for caching lighting information for <span class="highlight">Global Illumination</span>. 
 
 {{ image_2x1(
-    src1="/img/blog/surfel-maintenance/surfel-radiance-cascades.png", alt1="Figure B: Surfel Radiance Cascades. (by me)", width1="550px",
-    src2="/img/blog/surfel-maintenance/ea-gibs.png", alt2="Figure C: EA SEED's GIBS.", width2="550px"
+    src1="/img/articles/surfel-maintenance/surfel-radiance-cascades.png", alt1="Figure B: Surfel Radiance Cascades. (by me)", width1="550px",
+    src2="/img/articles/surfel-maintenance/ea-gibs.png", alt2="Figure C: EA SEED's GIBS.", width2="550px"
 ) }}
 
 I highly recommend you to check out EA SEED's [GIBS](https://www.ea.com/seed/news/siggraph21-global-illumination-surfels) *(Global Illumination based on Surfels)*  
@@ -65,7 +65,7 @@ Let's dive into how I <span class="highlight">dynamically managed</span> Surfels
 ## The Pipeline
 
 {{ image(
-    src="/img/blog/surfel-maintenance/surfel-pipeline.png", alt="Figure D: Overview of the Surfel Pipeline.", width="800px"
+    src="/img/articles/surfel-maintenance/surfel-pipeline.png", alt="Figure D: Overview of the Surfel Pipeline.", width="800px"
 ) }}
 
 Let's start with a <span class="highlight">high level overview</span> of the maintenance pipeline for a single frame.  
@@ -80,7 +80,7 @@ Due to time constraints, I didn't get to implementing a <b style="color: #ffc034
 However, I will still try to explain how one would implement it.
 
 {{ image(
-    src="/img/blog/surfel-maintenance/surfel-buffers.png", alt="Figure E: Overview of the Surfel Buffers.", width="640px"
+    src="/img/articles/surfel-maintenance/surfel-buffers.png", alt="Figure E: Overview of the Surfel Buffers.", width="640px"
 ) }}
 
 The pipeline also needs a place to store all the <span class="highlight">Surfel data</span> of course.  
@@ -109,7 +109,7 @@ I initially began by using a <span class="highlight">3D uniform grid</span>, for
 However, it scales very poorly when you want larger scenes, and when your Surfels are relatively small.
 
 {{ image(
-    src="/img/blog/surfel-maintenance/trapezoidal-grid.png", alt="Figure F: Trapezoidal grid structure used by GIBS.", width="480px"
+    src="/img/articles/surfel-maintenance/trapezoidal-grid.png", alt="Figure F: Trapezoidal grid structure used by GIBS.", width="480px"
 ) }}
 
 <span class="highlight">GIBS</span> combines a small uniform grid centered on the camera with <span class="highlight">trapezoidal grids</span> extending outwards.  
@@ -117,7 +117,7 @@ This gets you very fast lookups, as the trapezoidal grids are simply uniform gri
 However, I instead decided on using a <span class="highlight">multi-level hash grid</span>, so I never implemented this scheme.
 
 {{ image(
-    src="/img/blog/surfel-maintenance/multi-level-hash-grid.png", alt="Figure G: Heatmap view of the multi-level hash grid.", width="640px"
+    src="/img/articles/surfel-maintenance/multi-level-hash-grid.png", alt="Figure G: Heatmap view of the multi-level hash grid.", width="640px"
 ) }}
 
 The multi-level hash grid is relatively simple, it is a normal hash grid storing a `uint` for each cell.  
@@ -150,7 +150,7 @@ To achieve this, we will need <span class="highlight">multiple passes</span> for
 This <span class="highlight">applies to all</span> the acceleration structure variants I described above.
 
 {{ image(
-    src="/img/blog/surfel-maintenance/surfel-grid-list.png", alt="Figure H: Visualization of the grid & list structure.", width="640px"
+    src="/img/articles/surfel-maintenance/surfel-grid-list.png", alt="Figure H: Visualization of the grid & list structure.", width="640px"
 ) }}
 
 As we can see in *Figure H*, the idea is that after the passes, the grid buffer points to a <span class="highlight">range of elements</span> in the Surfel list buffer.  
@@ -265,7 +265,7 @@ So, let's have a look at how exactly we spawn Surfels.
 This is where the <span class="highlight">Surfel Stack</span> buffer comes into play.
 
 {{ image(
-    src="/img/blog/surfel-maintenance/surfel-spawning.png", alt="Figure I: Visualization of spawning a Surfel using the Stack.", width="960px"
+    src="/img/articles/surfel-maintenance/surfel-spawning.png", alt="Figure I: Visualization of spawning a Surfel using the Stack.", width="960px"
 ) }}
 
 First of all, as we can see in *Figure I*, the Surfel Stack has to start out filled with all unique Surfel IDs.  
@@ -321,7 +321,7 @@ Or we can use it as a threshold for deterministic recycling.
 If we decide to recycle a Surfel we'll have to <span class="highlight">push</span> it back onto the <span class="highlight">Surfel Stack</span>.  
 
 {{ image(
-    src="/img/blog/surfel-maintenance/surfel-recycling.png", alt="Figure J: Visualization of recycling a Surfel using the Stack.", width="640px"
+    src="/img/articles/surfel-maintenance/surfel-recycling.png", alt="Figure J: Visualization of recycling a Surfel using the Stack.", width="640px"
 ) }}
 
 All Surfel IDs to the right of the Surfel Stack pointer will always be <span class="highlight">unique IDs</span> to unused Surfel Data.  
@@ -365,7 +365,7 @@ When spawning a new Surfel, they assign that Surfel the transform ID of the obje
 Which points to the model matrix of that object in the global <span class="highlight">transform buffer</span>.
 
 {{ image(
-    src="/img/blog/surfel-maintenance/gibs-transform-gbuffer.png", alt="Figure K: Transform ID Gbuffer from GIBS.", width="640px"
+    src="/img/articles/surfel-maintenance/gibs-transform-gbuffer.png", alt="Figure K: Transform ID Gbuffer from GIBS.", width="640px"
 ) }}
 
 To know what transform a Surfel should be attached to when spawning, GIBS has a transform ID <span class="highlight">Gbuffer</span>.  
@@ -383,7 +383,7 @@ Keep in mind that these timings are for <span class="highlight">6</span> individ
 > Each Surfel Cascade has `1/4` the Surfel count of the previous one, with the first having `262.144` Surfels at most.
 
 {{ image(
-    src="/img/blog/surfel-maintenance/surfel-performance-890m.png", alt="Figure L: Captured on AMD 890M iGPU. (6 Surfel Cascades)", width="960px"
+    src="/img/articles/surfel-maintenance/surfel-performance-890m.png", alt="Figure L: Captured on AMD 890M iGPU. (6 Surfel Cascades)", width="960px"
 ) }}
 
 First, here's the performance on my <span class="highlight">AMD Radeon 890M</span> integrated GPU, we can see that the hash insertion *(Surfel Insertion)* is the most expensive part.  
@@ -391,7 +391,7 @@ This is because it requires us to wait for an <span class="highlight">atomic ope
 Besides that, I'd argue the performance is quite good, especially because this is maintaining 6 sets of Surfels.
 
 {{ image(
-    src="/img/blog/surfel-maintenance/surfel-performance-4070.png", alt="Figure M: Captured on RTX 4070 Mobile. (6 Surfel Cascades)", width="960px"
+    src="/img/articles/surfel-maintenance/surfel-performance-4070.png", alt="Figure M: Captured on RTX 4070 Mobile. (6 Surfel Cascades)", width="960px"
 ) }}
 
 Now let's look at the performance on my <span class="highlight">NVIDIA RTX 4070</span> Mobile GPU.  
